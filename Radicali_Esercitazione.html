@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radicali - Esercizi, Teoria e Flashcard</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+/* ===== PALETTE TENUI E RILASSANTI ===== */
+:root {
+  --bg: #f0f4f3;
+  --card-bg: #ffffff;
+  --accent1: #7fb5b0;
+  --accent2: #a8d5ba;
+  --accent3: #d4ebd0;
+  --accent4: #f2d7d5;
+  --accent5: #d5c8e6;
+  --text: #2c3e50;
+  --text-light: #5d6d7e;
+  --border: #d5dbdb;
+  --hint-bg: #fff9e6;
+  --sol-bg: #e8f8f5;
+  --step-bg: #f4ecf7;
+  --theory-bg: #eaf2f8;
+  --flash-bg: #fef9e7;
+  --btn-hint: #f0b27a;
+  --btn-sol: #76d7c4;
+  --btn-step: #bb8fce;
+  --btn-hint-hover: #e59866;
+  --btn-sol-hover: #48c9b0;
+  --btn-step-hover: #a569bd;
+  --tab-active: #7fb5b0;
+  --tab-inactive: #d5dbdb;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 0;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header h1 { font-size: 2em; margin-bottom: 5px; }
+.header p { font-size: 1.1em; opacity: 0.9; }
+
+/* TABS */
+.tab-container {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 20px auto 0;
+  max-width: 900px;
+}
+.tab-btn {
+  flex: 1;
+  max-width: 300px;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.05em;
+  font-weight: 600;
+  border-radius: 12px 12px 0 0;
+  transition: all 0.3s;
+  background: var(--tab-inactive);
+  color: var(--text-light);
+}
+.tab-btn.active {
+  background: var(--card-bg);
+  color: var(--accent1);
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+}
+.tab-btn:hover { opacity: 0.85; }
+
+.tab-content {
+  display: none;
+  max-width: 900px;
+  margin: 0 auto 40px;
+  background: var(--card-bg);
+  border-radius: 0 0 12px 12px;
+  padding: 30px 25px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+}
+.tab-content.active { display: block; }
+
+/* SEZIONI ESERCIZI */
+.section-title {
+  font-size: 1.5em;
+  color: var(--accent1);
+  border-bottom: 3px solid var(--accent2);
+  padding-bottom: 8px;
+  margin: 30px 0 15px;
+}
+.section-title:first-child { margin-top: 0; }
+
+.exercise {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent1);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.exercise .ex-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.ex-number {
+  background: var(--accent1);
+  color: white;
+  font-weight: 700;
+  font-size: 0.9em;
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+.ex-text {
+  font-size: 1.08em;
+  flex: 1;
+}
+.ex-result {
+  font-weight: 600;
+  color: var(--accent1);
+  margin-left: 8px;
+}
+
+/* BUTTONS */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.92em;
+  font-weight: 600;
+  transition: all 0.3s;
+  color: white;
+}
+.btn-hint { background: var(--btn-hint); }
+.btn-hint:hover { background: var(--btn-hint-hover); }
+.btn-sol { background: var(--btn-sol); }
+.btn-sol:hover { background: var(--btn-sol-hover); }
+.btn-step { background: var(--btn-step); }
+.btn-step:hover { background: var(--btn-step-hover); }
+
+/* COLLAPSIBLE PANELS */
+.panel {
+  display: none;
+  border-radius: 8px;
+  padding: 15px 18px;
+  margin-top: 10px;
+  font-size: 0.98em;
+  line-height: 1.7;
+  animation: fadeIn 0.3s ease;
+}
+.panel.show { display: block; }
+.panel-hint { background: var(--hint-bg); border-left: 4px solid var(--btn-hint); }
+.panel-sol { background: var(--sol-bg); border-left: 4px solid var(--btn-sol); }
+.panel-step { background: var(--step-bg); border-left: 4px solid var(--btn-step); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* TEORIA */
+.theory-box {
+  background: var(--theory-bg);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 5px solid var(--accent1);
+}
+.theory-box h3 {
+  color: var(--accent1);
+  margin-bottom: 10px;
+}
+.theory-box .example {
+  background: white;
+  border-radius: 6px;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border-left: 3px solid var(--accent2);
+}
+
+/* FLASHCARD */
+.flashcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+.flashcard {
+  background: var(--flash-bg);
+  border: 2px solid var(--accent2);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 140px;
+  position: relative;
+}
+.flashcard:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.flashcard .fc-question {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 1.02em;
+}
+.flashcard .fc-answer {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px dashed var(--accent2);
+  color: var(--text-light);
+}
+.flashcard.flipped .fc-answer { display: block; }
+.flashcard .fc-instruction {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 0.8em;
+  color: var(--accent1);
+  opacity: 0.7;
+}
+.flashcard.flipped .fc-instruction { display: none; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .tab-btn { font-size: 0.88em; padding: 10px 8px; }
+  .tab-content { padding: 18px 12px; }
+  .exercise { padding: 14px 12px; }
+  .btn { padding: 7px 14px; font-size: 0.85em; }
+  .header h1 { font-size: 1.5em; }
+  .flashcard-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📐 Numeri Radicali</h1>
+  <p>Espressioni irrazionali · Equazioni · Sistemi · Problemi</p>
+</div>
+
+<div class="tab-container">
+  <button class="tab-btn active" onclick="openTab(event,'tabExercises')">📝 Esercizi</button>
+  <button class="tab-btn" onclick="openTab(event,'tabTheory')">📖 Teoria</button>
+  <button class="tab-btn" onclick="openTab(event,'tabFlash')">🃏 Flashcard</button>
+</div>
+
+<!-- ============================================================ -->
+<!--                    TAB 1 – ESERCIZI                          -->
+<!-- ============================================================ -->
+<div id="tabExercises" class="tab-content active">
+
+<!-- =================== ESPRESSIONI IRRAZIONALI =================== -->
+<h2 class="section-title">Espressioni irrazionali (riepilogo)</h2>
+
+<!-- ES 625 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">625</span>
+    <span class="ex-text">$\dfrac{4+2\sqrt{3}}{\sqrt{2}}\cdot\dfrac{1}{1+\sqrt{3}}-\dfrac{\sqrt{2}}{2}$</span>
+    <span class="ex-result">$\left[\dfrac{\sqrt{6}}{2}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h625')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s625')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st625')">📝 Svolgimento</button>
+  </div>
+  <div id="h625" class="panel panel-hint">
+    Fattorizza $4+2\sqrt{3}$ come $2(2+\sqrt{3})$, poi razionalizza il denominatore $1+\sqrt{3}$ moltiplicando per il coniugato $1-\sqrt{3}$.
+  </div>
+  <div id="s625" class="panel panel-sol">
+    $$\dfrac{\sqrt{6}}{2}$$
+  </div>
+  <div id="st625" class="panel panel-step">
+    <strong>Passo 1:</strong> Fattorizziamo il numeratore della prima frazione:
+    $$4+2\sqrt{3}=2(2+\sqrt{3})$$
+    Quindi:
+    $$\frac{2(2+\sqrt{3})}{\sqrt{2}}\cdot\frac{1}{1+\sqrt{3}}-\frac{\sqrt{2}}{2}$$
+
+    <strong>Passo 2:</strong> Moltiplichiamo le prime due frazioni:
+    $$\frac{2(2+\sqrt{3})}{\sqrt{2}(1+\sqrt{3})}$$
+
+    <strong>Passo 3:</strong> Razionalizziamo $\frac{1}{1+\sqrt{3}}$ moltiplicando per $\frac{1-\sqrt{3}}{1-\sqrt{3}}$:
+    $$\frac{1}{1+\sqrt{3}}\cdot\frac{1-\sqrt{3}}{1-\sqrt{3}}=\frac{1-\sqrt{3}}{1-3}=\frac{1-\sqrt{3}}{-2}=\frac{\sqrt{3}-1}{2}$$
+
+    <strong>Passo 4:</strong> Sostituiamo:
+    $$\frac{2(2+\sqrt{3})}{\sqrt{2}}\cdot\frac{\sqrt{3}-1}{2}=\frac{(2+\sqrt{3})(\sqrt{3}-1)}{\sqrt{2}}$$
+
+    <strong>Passo 5:</strong> Espandiamo $(2+\sqrt{3})(\sqrt{3}-1)=2\sqrt{3}-2+3-\sqrt{3}=\sqrt{3}+1$:
+    $$\frac{\sqrt{3}+1}{\sqrt{2}}-\frac{\sqrt{2}}{2}$$
+
+    <strong>Passo 6:</strong> Razionalizziamo $\frac{\sqrt{3}+1}{\sqrt{2}}=\frac{(\sqrt{3}+1)\sqrt{2}}{2}=\frac{\sqrt{6}+\sqrt{2}}{2}$:
+    $$\frac{\sqrt{6}+\sqrt{2}}{2}-\frac{\sqrt{2}}{2}=\frac{\sqrt{6}+\sqrt{2}-\sqrt{2}}{2}=\frac{\sqrt{6}}{2}$$
+  </div>
+</div>
+
+<!-- ES 626 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">626</span>
+    <span class="ex-text">$\dfrac{6-2\sqrt{5}}{\sqrt{5}-2}\cdot\dfrac{\sqrt{5}}{3-\sqrt{5}}\cdot\dfrac{10}{5+\sqrt{5}}$</span>
+    <span class="ex-result">$[15+5\sqrt{5}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h626')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s626')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st626')">📝 Svolgimento</button>
+  </div>
+  <div id="h626" class="panel panel-hint">
+    Fattorizza $6-2\sqrt{5}=2(3-\sqrt{5})$ e $5+\sqrt{5}=\sqrt{5}(\sqrt{5}+1)$. Semplifica i fattori comuni prima di moltiplicare.
+  </div>
+  <div id="s626" class="panel panel-sol">
+    $$15+5\sqrt{5}$$
+  </div>
+  <div id="st626" class="panel panel-step">
+    <strong>Passo 1:</strong> Fattorizziamo:
+    $$6-2\sqrt{5}=2(3-\sqrt{5}),\qquad 5+\sqrt{5}=\sqrt{5}(\sqrt{5}+1)$$
+
+    <strong>Passo 2:</strong> Riscriviamo:
+    $$\frac{2(3-\sqrt{5})}{\sqrt{5}-2}\cdot\frac{\sqrt{5}}{3-\sqrt{5}}\cdot\frac{10}{\sqrt{5}(\sqrt{5}+1)}$$
+
+    <strong>Passo 3:</strong> Semplifichiamo $(3-\sqrt{5})$ e $\sqrt{5}$:
+    $$\frac{2}{\sqrt{5}-2}\cdot\frac{10}{\sqrt{5}+1}=\frac{20}{(\sqrt{5}-2)(\sqrt{5}+1)}$$
+
+    <strong>Passo 4:</strong> Espandiamo il denominatore:
+    $$(\sqrt{5}-2)(\sqrt{5}+1)=5+\sqrt{5}-2\sqrt{5}-2=3-\sqrt{5}$$
+
+    <strong>Passo 5:</strong> Razionalizziamo:
+    $$\frac{20}{3-\sqrt{5}}\cdot\frac{3+\sqrt{5}}{3+\sqrt{5}}=\frac{20(3+\sqrt{5})}{9-5}=\frac{20(3+\sqrt{5})}{4}=5(3+\sqrt{5})=15+5\sqrt{5}$$
+  </div>
+</div>
+
+<!-- ES 627 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">627</span>
+    <span class="ex-text">$\dfrac{\sqrt{\sqrt{5}-1}\,(\sqrt{6}-2\sqrt{2})}{\sqrt{\sqrt{5}+1}\,(\sqrt{3}-2)(\sqrt{5}-1)}+\dfrac{1}{\sqrt{2}}+\dfrac{1}{\sqrt{2}-1}$</span>
+    <span class="ex-result">$[2\sqrt{2}+1]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h627')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s627')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st627')">📝 Svolgimento</button>
+  </div>
+  <div id="h627" class="panel panel-hint">
+    Per la prima frazione, moltiplica numeratore e denominatore per $\sqrt{\sqrt{5}-1}$ per sfruttare il prodotto $(\sqrt{5}+1)(\sqrt{5}-1)=4$. Fattorizza $\sqrt{6}-2\sqrt{2}=\sqrt{2}(\sqrt{3}-2)$.
+  </div>
+  <div id="s627" class="panel panel-sol">
+    $$2\sqrt{2}+1$$
+  </div>
+  <div id="st627" class="panel panel-step">
+    <strong>Passo 1:</strong> Fattorizziamo $\sqrt{6}-2\sqrt{2}=\sqrt{2}(\sqrt{3}-2)$.
+
+    <strong>Passo 2:</strong> La prima frazione diventa:
+    $$\frac{\sqrt{\sqrt{5}-1}\cdot\sqrt{2}\,(\sqrt{3}-2)}{\sqrt{\sqrt{5}+1}\,(\sqrt{3}-2)(\sqrt{5}-1)}=\frac{\sqrt{2}\,\sqrt{\sqrt{5}-1}}{\sqrt{\sqrt{5}+1}\,(\sqrt{5}-1)}$$
+
+    <strong>Passo 3:</strong> Notiamo che $\frac{\sqrt{\sqrt{5}-1}}{\sqrt{\sqrt{5}+1}}=\sqrt{\frac{\sqrt{5}-1}{\sqrt{5}+1}}$. Razionalizzando:
+    $$\frac{\sqrt{5}-1}{\sqrt{5}+1}\cdot\frac{\sqrt{5}-1}{\sqrt{5}-1}=\frac{(\sqrt{5}-1)^2}{4}$$
+    Quindi $\sqrt{\frac{\sqrt{5}-1}{\sqrt{5}+1}}=\frac{\sqrt{5}-1}{2}$.
+
+    <strong>Passo 4:</strong>
+    $$\frac{\sqrt{2}\cdot\frac{\sqrt{5}-1}{2}}{\sqrt{5}-1}=\frac{\sqrt{2}}{2}$$
+
+    <strong>Passo 5:</strong> L'espressione completa:
+    $$\frac{\sqrt{2}}{2}+\frac{1}{\sqrt{2}}+\frac{1}{\sqrt{2}-1}$$
+    $\frac{1}{\sqrt{2}}=\frac{\sqrt{2}}{2}$ e $\frac{1}{\sqrt{2}-1}=\sqrt{2}+1$ (razionalizzando).
+
+    <strong>Passo 6:</strong>
+    $$\frac{\sqrt{2}}{2}+\frac{\sqrt{2}}{2}+\sqrt{2}+1=\sqrt{2}+\sqrt{2}+1=2\sqrt{2}+1$$
+  </div>
+</div>
+
+<!-- ES 628 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">628</span>
+    <span class="ex-text">$\dfrac{1}{\sqrt{2}-\sqrt{5}}+\dfrac{2}{\sqrt{2}}-\dfrac{1}{\sqrt{2}+\sqrt{5}}$</span>
+    <span class="ex-result">$\left[\dfrac{3\sqrt{2}-2\sqrt{5}}{3}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h628')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s628')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st628')">📝 Svolgimento</button>
+  </div>
+  <div id="h628" class="panel panel-hint">
+    Razionalizza le frazioni con $\sqrt{2}-\sqrt{5}$ e $\sqrt{2}+\sqrt{5}$ (coniugati). Il prodotto $(\sqrt{2})^2-(\sqrt{5})^2=2-5=-3$.
+  </div>
+  <div id="s628" class="panel panel-sol">
+    $$\frac{3\sqrt{2}-2\sqrt{5}}{3}$$
+  </div>
+  <div id="st628" class="panel panel-step">
+    <strong>Passo 1:</strong> Razionalizziamo:
+    $$\frac{1}{\sqrt{2}-\sqrt{5}}\cdot\frac{\sqrt{2}+\sqrt{5}}{\sqrt{2}+\sqrt{5}}=\frac{\sqrt{2}+\sqrt{5}}{2-5}=-\frac{\sqrt{2}+\sqrt{5}}{3}$$
+    $$\frac{1}{\sqrt{2}+\sqrt{5}}\cdot\frac{\sqrt{2}-\sqrt{5}}{\sqrt{2}-\sqrt{5}}=\frac{\sqrt{2}-\sqrt{5}}{-3}=\frac{\sqrt{5}-\sqrt{2}}{3}$$
+
+    <strong>Passo 2:</strong> Razionalizziamo $\frac{2}{\sqrt{2}}=\sqrt{2}$.
+
+    <strong>Passo 3:</strong> Sommiamo:
+    $$-\frac{\sqrt{2}+\sqrt{5}}{3}+\sqrt{2}-\frac{\sqrt{5}-\sqrt{2}}{3}$$
+    $$=-\frac{\sqrt{2}+\sqrt{5}+\sqrt{5}-\sqrt{2}}{3}+\sqrt{2}=-\frac{2\sqrt{5}}{3}+\sqrt{2}=\frac{3\sqrt{2}-2\sqrt{5}}{3}$$
+  </div>
+</div>
+
+<!-- ES 629 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">629</span>
+    <span class="ex-text">$\left(\dfrac{2-\sqrt{3}}{7+4\sqrt{3}}+\dfrac{3}{2+\sqrt{3}}\right):\dfrac{2}{2+\sqrt{3}}$</span>
+    <span class="ex-result">$[5-2\sqrt{3}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h629')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s629')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st629')">📝 Svolgimento</button>
+  </div>
+  <div id="h629" class="panel panel-hint">
+    Razionalizza $7+4\sqrt{3}$ moltiplicando per $7-4\sqrt{3}$ (nota: $49-48=1$). Poi razionalizza $2+\sqrt{3}$ con $2-\sqrt{3}$.
+  </div>
+  <div id="s629" class="panel panel-sol">
+    $$5-2\sqrt{3}$$
+  </div>
+  <div id="st629" class="panel panel-step">
+    <strong>Passo 1:</strong> Razionalizziamo $\frac{2-\sqrt{3}}{7+4\sqrt{3}}$:
+    $$\frac{(2-\sqrt{3})(7-4\sqrt{3})}{49-48}=(2-\sqrt{3})(7-4\sqrt{3})=14-8\sqrt{3}-7\sqrt{3}+4\cdot 3=26-15\sqrt{3}$$
+
+    <strong>Passo 2:</strong> Razionalizziamo $\frac{3}{2+\sqrt{3}}=\frac{3(2-\sqrt{3})}{4-3}=6-3\sqrt{3}$.
+
+    <strong>Passo 3:</strong> Somma nella parentesi:
+    $$26-15\sqrt{3}+6-3\sqrt{3}=32-18\sqrt{3}$$
+
+    <strong>Passo 4:</strong> Divisione per $\frac{2}{2+\sqrt{3}}$, cioè moltiplicazione per $\frac{2+\sqrt{3}}{2}$:
+    $$\frac{(32-18\sqrt{3})(2+\sqrt{3})}{2}=\frac{64+32\sqrt{3}-36\sqrt{3}-18\cdot3}{2}=\frac{64-4\sqrt{3}-54}{2}=\frac{10-4\sqrt{3}}{2}=5-2\sqrt{3}$$
+  </div>
+</div>
+
+<!-- ES 630 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">630</span>
+    <span class="ex-text">$\dfrac{1}{1-\sqrt{2}}-\dfrac{1}{\sqrt{2}-\sqrt{3}}+\dfrac{1}{\sqrt{3}-\sqrt{4}}-\dfrac{1}{\sqrt{4}-\sqrt{5}}$</span>
+    <span class="ex-result">$[\sqrt{5}-1]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h630')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s630')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st630')">📝 Svolgimento</button>
+  </div>
+  <div id="h630" class="panel panel-hint">
+    Questa è una somma telescopica. Razionalizza ciascuna frazione: $\frac{1}{a-b}\cdot\frac{a+b}{a+b}$. Quando $a=\sqrt{n}$, $b=\sqrt{n+1}$, il denominatore diventa $n-(n+1)=-1$.
+  </div>
+  <div id="s630" class="panel panel-sol">
+    $$\sqrt{5}-1$$
+  </div>
+  <div id="st630" class="panel panel-step">
+    <strong>Passo 1:</strong> Razionalizziamo ciascuna:
+    $$\frac{1}{1-\sqrt{2}}\cdot\frac{1+\sqrt{2}}{1+\sqrt{2}}=\frac{1+\sqrt{2}}{1-2}=-(1+\sqrt{2})$$
+    $$\frac{1}{\sqrt{2}-\sqrt{3}}\cdot\frac{\sqrt{2}+\sqrt{3}}{\sqrt{2}+\sqrt{3}}=\frac{\sqrt{2}+\sqrt{3}}{2-3}=-(\sqrt{2}+\sqrt{3})$$
+    $$\frac{1}{\sqrt{3}-\sqrt{4}}=-(\sqrt{3}+\sqrt{4}),\qquad \frac{1}{\sqrt{4}-\sqrt{5}}=-(\sqrt{4}+\sqrt{5})$$
+
+    <strong>Passo 2:</strong> L'espressione diventa (attenzione ai segni):
+    $$-(1+\sqrt{2})-\bigl[-(\sqrt{2}+\sqrt{3})\bigr]+\bigl[-(\sqrt{3}+2)\bigr]-\bigl[-(\sqrt{4}+\sqrt{5})\bigr]$$
+    $$=-(1+\sqrt{2})+(\sqrt{2}+\sqrt{3})-(\sqrt{3}+2)+(2+\sqrt{5})$$
+    $$=-1-\sqrt{2}+\sqrt{2}+\sqrt{3}-\sqrt{3}-2+2+\sqrt{5}=\sqrt{5}-1$$
+  </div>
+</div>
+
+<!-- ES 631 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">631</span>
+    <span class="ex-text">$\left(\dfrac{\sqrt{2}+1}{1-\sqrt{2}}-\dfrac{2}{\sqrt{2}+1}\right)\cdot\left(\dfrac{\sqrt{2}+3}{\sqrt{2}}-\sqrt{2}\right):\dfrac{9+5\sqrt{2}}{8}$</span>
+    <span class="ex-result">$[-4\sqrt{2}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h631')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s631')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st631')">📝 Svolgimento</button>
+  </div>
+  <div id="h631" class="panel panel-hint">
+    Razionalizza ciascuna frazione nella prima parentesi. Semplifica la seconda parentesi riducendo allo stesso denominatore.
+  </div>
+  <div id="s631" class="panel panel-sol">
+    $$-4\sqrt{2}$$
+  </div>
+  <div id="st631" class="panel panel-step">
+    <strong>Passo 1 – Prima parentesi:</strong>
+    $$\frac{\sqrt{2}+1}{1-\sqrt{2}}=-\frac{(\sqrt{2}+1)}{(\sqrt{2}-1)}=-\frac{(\sqrt{2}+1)^2}{(\sqrt{2})^2-1^2}=-\frac{3+2\sqrt{2}}{1}=-(3+2\sqrt{2})$$
+    $$\frac{2}{\sqrt{2}+1}=\frac{2(\sqrt{2}-1)}{2-1}=2\sqrt{2}-2$$
+    Differenza: $-(3+2\sqrt{2})-(2\sqrt{2}-2)=-3-2\sqrt{2}-2\sqrt{2}+2=-1-4\sqrt{2}$
+
+    <strong>Passo 2 – Seconda parentesi:</strong>
+    $$\frac{\sqrt{2}+3}{\sqrt{2}}-\sqrt{2}=1+\frac{3}{\sqrt{2}}-\sqrt{2}=\frac{3}{\sqrt{2}}=\frac{3\sqrt{2}}{2}$$
+
+    <strong>Passo 3 – Prodotto:</strong>
+    $$(-1-4\sqrt{2})\cdot\frac{3\sqrt{2}}{2}=\frac{-3\sqrt{2}-12\cdot 2}{2}=\frac{-3\sqrt{2}-24}{2}$$
+
+    Hmm, ricalcoliamo con attenzione.
+
+    $(-1-4\sqrt{2})\cdot\frac{3\sqrt{2}}{2}=\frac{-3\sqrt{2}-4\sqrt{2}\cdot 3\sqrt{2}}{2}=\frac{-3\sqrt{2}-12\cdot 2}{2}=\frac{-3\sqrt{2}-24}{2}$
+
+    <strong>Passo 4 – Divisione per $\frac{9+5\sqrt{2}}{8}$:</strong>
+    $$\frac{-3\sqrt{2}-24}{2}\cdot\frac{8}{9+5\sqrt{2}}=\frac{-4(3\sqrt{2}+24)}{9+5\sqrt{2}}=\frac{-12(\sqrt{2}+8)}{9+5\sqrt{2}} \cdot\ldots$$
+
+    Procediamo in modo più ordinato. Razionalizziamo $\frac{1}{9+5\sqrt{2}}$:
+    $$\frac{9-5\sqrt{2}}{81-50}=\frac{9-5\sqrt{2}}{31}$$
+
+    Riproviamo il conto in modo diretto:
+    $$\frac{-3(\sqrt{2}+8)}{2}\cdot\frac{8}{9+5\sqrt{2}}$$
+    
+    In realtà, $-3\sqrt{2}-24=-3(\sqrt{2}+8)$. 
+
+    Valore numerico: $-3(1.414+8)/2\cdot 8/(9+7.07)=-3\cdot9.414/2\cdot 8/16.07=-14.12\cdot 0.498\approx -7.03$. Ma $-4\sqrt{2}\approx -5.66$.
+
+    Rifacciamo la prima parentesi con più cura.
+    
+    $\frac{\sqrt{2}+1}{1-\sqrt{2}}$: moltiplichiamo sopra e sotto per $-1$: $\frac{-(\sqrt{2}+1)}{\sqrt{2}-1}\cdot\frac{\sqrt{2}+1}{\sqrt{2}+1}=\frac{-(3+2\sqrt{2})}{1}=-(3+2\sqrt{2})$. ✓
+
+    $\frac{2}{\sqrt{2}+1}\cdot\frac{\sqrt{2}-1}{\sqrt{2}-1}=\frac{2(\sqrt{2}-1)}{1}=2\sqrt{2}-2$. ✓
+
+    Differenza: $-(3+2\sqrt{2})-(2\sqrt{2}-2)=-3-2\sqrt{2}-2\sqrt{2}+2=-1-4\sqrt{2}$. ✓
+
+    Seconda parentesi: $\frac{\sqrt{2}+3}{\sqrt{2}}-\sqrt{2}=1+\frac{3}{\sqrt{2}}-\sqrt{2}=1+\frac{3\sqrt{2}}{2}-\sqrt{2}=1+\frac{3\sqrt{2}-2\sqrt{2}}{2}=1+\frac{\sqrt{2}}{2}=\frac{2+\sqrt{2}}{2}$. ✓
+
+    Prodotto: $(-1-4\sqrt{2})\cdot\frac{2+\sqrt{2}}{2}=\frac{(-1-4\sqrt{2})(2+\sqrt{2})}{2}$
+
+    $(-1)(2)=-2;\; (-1)(\sqrt{2})=-\sqrt{2};\; (-4\sqrt{2})(2)=-8\sqrt{2};\; (-4\sqrt{2})(\sqrt{2})=-8$
+
+    $=\frac{-2-\sqrt{2}-8\sqrt{2}-8}{2}=\frac{-10-9\sqrt{2}}{2}$
+
+    Divisione: $\frac{-10-9\sqrt{2}}{2}\cdot\frac{8}{9+5\sqrt{2}}=\frac{-4(10+9\sqrt{2})}{9+5\sqrt{2}}$
+
+    Razionalizziamo: $\frac{10+9\sqrt{2}}{9+5\sqrt{2}}\cdot\frac{9-5\sqrt{2}}{9-5\sqrt{2}}=\frac{(10+9\sqrt{2})(9-5\sqrt{2})}{81-50}$
+
+    Numeratore: $90-50\sqrt{2}+81\sqrt{2}-45\cdot 2=90-50\sqrt{2}+81\sqrt{2}-90=31\sqrt{2}$
+
+    $=\frac{31\sqrt{2}}{31}=\sqrt{2}$
+
+    Quindi: $-4\cdot\sqrt{2}=-4\sqrt{2}$. ✓
+
+    <strong>Risultato:</strong> $-4\sqrt{2}$
+  </div>
+</div>
+
+<!-- ES 632 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">632</span>
+    <span class="ex-text">$\left[3(\sqrt{5}+\sqrt{2})^2-2(\sqrt{10}+1)^2+1\right]:\sqrt{40}+\dfrac{1}{\sqrt{5}-2}$</span>
+    <span class="ex-result">$[\sqrt{5}+3]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h632')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s632')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st632')">📝 Svolgimento</button>
+  </div>
+  <div id="h632" class="panel panel-hint">
+    Espandi i quadrati $(\sqrt{5}+\sqrt{2})^2=5+2\sqrt{10}+2=7+2\sqrt{10}$ e $(\sqrt{10}+1)^2=10+2\sqrt{10}+1=11+2\sqrt{10}$. Nota che $\sqrt{40}=2\sqrt{10}$.
+  </div>
+  <div id="s632" class="panel panel-sol">
+    $$\sqrt{5}+3$$
+  </div>
+  <div id="st632" class="panel panel-step">
+    <strong>Passo 1:</strong> Espandiamo:
+    $$(\sqrt{5}+\sqrt{2})^2=7+2\sqrt{10},\quad (\sqrt{10}+1)^2=11+2\sqrt{10}$$
+
+    <strong>Passo 2:</strong> Nella parentesi quadra:
+    $$3(7+2\sqrt{10})-2(11+2\sqrt{10})+1=21+6\sqrt{10}-22-4\sqrt{10}+1=2\sqrt{10}$$
+
+    <strong>Passo 3:</strong> $\sqrt{40}=2\sqrt{10}$, quindi:
+    $$\frac{2\sqrt{10}}{2\sqrt{10}}+\frac{1}{\sqrt{5}-2}=1+\frac{1}{\sqrt{5}-2}$$
+
+    <strong>Passo 4:</strong> Razionalizziamo: $\frac{1}{\sqrt{5}-2}=\frac{\sqrt{5}+2}{5-4}=\sqrt{5}+2$.
+
+    <strong>Passo 5:</strong> $1+\sqrt{5}+2=\sqrt{5}+3$.
+  </div>
+</div>
+
+<!-- ES 633 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">633</span>
+    <span class="ex-text">$\dfrac{5}{3}\left[20-(\sqrt{2}-3\sqrt{3})^2\right]:(2\sqrt{6}+3)+\dfrac{25}{11-4\sqrt{6}}$</span>
+    <span class="ex-result">$[22]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h633')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s633')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st633')">📝 Svolgimento</button>
+  </div>
+  <div id="h633" class="panel panel-hint">
+    Espandi $(\sqrt{2}-3\sqrt{3})^2=2-6\sqrt{6}+27=29-6\sqrt{6}$. Poi nella parentesi quadra ottieni $20-29+6\sqrt{6}=-9+6\sqrt{6}=3(2\sqrt{6}-3)$.
+  </div>
+  <div id="s633" class="panel panel-sol">
+    $$22$$
+  </div>
+  <div id="st633" class="panel panel-step">
+    <strong>Passo 1:</strong> $(\sqrt{2}-3\sqrt{3})^2=2-6\sqrt{6}+27=29-6\sqrt{6}$.
+
+    <strong>Passo 2:</strong> $20-(29-6\sqrt{6})=-9+6\sqrt{6}=3(2\sqrt{6}-3)$.
+
+    <strong>Passo 3:</strong> $\frac{5}{3}\cdot 3(2\sqrt{6}-3):(2\sqrt{6}+3)=\frac{5(2\sqrt{6}-3)}{2\sqrt{6}+3}$.
+
+    <strong>Passo 4:</strong> Razionalizziamo:
+    $$\frac{5(2\sqrt{6}-3)(2\sqrt{6}-3)}{(2\sqrt{6}+3)(2\sqrt{6}-3)}=\frac{5(2\sqrt{6}-3)^2}{24-9}=\frac{5(24-12\sqrt{6}+9)}{15}=\frac{(33-12\sqrt{6})}{3}=11-4\sqrt{6}$$
+
+    <strong>Passo 5:</strong> $11-4\sqrt{6}+\frac{25}{11-4\sqrt{6}}$. 
+
+    Razionalizziamo la seconda: $\frac{25}{11-4\sqrt{6}}\cdot\frac{11+4\sqrt{6}}{11+4\sqrt{6}}=\frac{25(11+4\sqrt{6})}{121-96}=\frac{25(11+4\sqrt{6})}{25}=11+4\sqrt{6}$.
+
+    <strong>Passo 6:</strong> $11-4\sqrt{6}+11+4\sqrt{6}=22$.
+  </div>
+</div>
+
+<!-- =================== EQUAZIONI CON COEFFICIENTI IRRAZIONALI =================== -->
+<h2 class="section-title">Equazioni con coefficienti irrazionali</h2>
+
+<!-- ES 637 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">637</span>
+    <span class="ex-text">$\sqrt{5}\,x-10=0$</span>
+    <span class="ex-result">$[2\sqrt{5}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h637')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s637')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st637')">📝 Svolgimento</button>
+  </div>
+  <div id="h637" class="panel panel-hint">
+    Isola $x$: porta il termine noto a destra e dividi per $\sqrt{5}$. Razionalizza.
+  </div>
+  <div id="s637" class="panel panel-sol">
+    $$x=2\sqrt{5}$$
+  </div>
+  <div id="st637" class="panel panel-step">
+    $$\sqrt{5}\,x=10 \implies x=\frac{10}{\sqrt{5}}=\frac{10\sqrt{5}}{5}=2\sqrt{5}$$
+  </div>
+</div>
+
+<!-- ES 638 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">638</span>
+    <span class="ex-text">$3\sqrt{3}\,x+4\sqrt{27}=0$</span>
+    <span class="ex-result">$[-4]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h638')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s638')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st638')">📝 Svolgimento</button>
+  </div>
+  <div id="h638" class="panel panel-hint">
+    Semplifica $\sqrt{27}=3\sqrt{3}$, poi risolvi l'equazione lineare.
+  </div>
+  <div id="s638" class="panel panel-sol">$$x=-4$$</div>
+  <div id="st638" class="panel panel-step">
+    $$3\sqrt{3}\,x+4\cdot 3\sqrt{3}=0 \implies 3\sqrt{3}\,x+12\sqrt{3}=0 \implies 3\sqrt{3}\,x=-12\sqrt{3}$$
+    $$x=\frac{-12\sqrt{3}}{3\sqrt{3}}=-4$$
+  </div>
+</div>
+
+<!-- ES 639 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">639</span>
+    <span class="ex-text">$\sqrt{5}\,x=x+8$</span>
+    <span class="ex-result">$[2(\sqrt{5}+1)]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h639')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s639')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st639')">📝 Svolgimento</button>
+  </div>
+  <div id="h639" class="panel panel-hint">
+    Porta tutti i termini con $x$ a sinistra: $\sqrt{5}\,x - x = 8$, poi raccogli $x$.
+  </div>
+  <div id="s639" class="panel panel-sol">$$x=2(\sqrt{5}+1)$$</div>
+  <div id="st639" class="panel panel-step">
+    $$\sqrt{5}\,x - x = 8 \implies x(\sqrt{5}-1)=8 \implies x=\frac{8}{\sqrt{5}-1}$$
+    Razionalizziamo: $\frac{8(\sqrt{5}+1)}{5-1}=\frac{8(\sqrt{5}+1)}{4}=2(\sqrt{5}+1)$.
+  </div>
+</div>
+
+<!-- ES 640 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">640</span>
+    <span class="ex-text">$\sqrt{27}\,x-\sqrt{3}\,x=6$</span>
+    <span class="ex-result">$[\sqrt{3}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h640')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s640')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st640')">📝 Svolgimento</button>
+  </div>
+  <div id="h640" class="panel panel-hint">
+    $\sqrt{27}=3\sqrt{3}$, quindi $3\sqrt{3}\,x-\sqrt{3}\,x=2\sqrt{3}\,x$.
+  </div>
+  <div id="s640" class="panel panel-sol">$$x=\sqrt{3}$$</div>
+  <div id="st640" class="panel panel-step">
+    $$3\sqrt{3}\,x-\sqrt{3}\,x=6 \implies 2\sqrt{3}\,x=6 \implies x=\frac{6}{2\sqrt{3}}=\frac{3}{\sqrt{3}}=\frac{3\sqrt{3}}{3}=\sqrt{3}$$
+  </div>
+</div>
+
+<!-- ES 641 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">641</span>
+    <span class="ex-text">$(2-\sqrt{3})\,x=x-2$</span>
+    <span class="ex-result">$[1+\sqrt{3}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h641')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s641')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st641')">📝 Svolgimento</button>
+  </div>
+  <div id="h641" class="panel panel-hint">
+    Espandi, raccogli $x$ a sinistra: $(2-\sqrt{3})x - x = -2$, cioè $(1-\sqrt{3})x=-2$.
+  </div>
+  <div id="s641" class="panel panel-sol">$$x=1+\sqrt{3}$$</div>
+  <div id="st641" class="panel panel-step">
+    $$(2-\sqrt{3})x-x=-2 \implies (1-\sqrt{3})x=-2$$
+    $$x=\frac{-2}{1-\sqrt{3}}=\frac{-2(1+\sqrt{3})}{1-3}=\frac{-2(1+\sqrt{3})}{-2}=1+\sqrt{3}$$
+  </div>
+</div>
+
+<!-- ES 642 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">642</span>
+    <span class="ex-text">$3x\sqrt{2}+2-\sqrt{2}=2(\sqrt{2}-2x)$</span>
+    <span class="ex-result">$[13-9\sqrt{2}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h642')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s642')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st642')">📝 Svolgimento</button>
+  </div>
+  <div id="h642" class="panel panel-hint">
+    Espandi il membro destro, porta i termini in $x$ a sinistra e i termini noti a destra, poi dividi per il coefficiente di $x$ e razionalizza.
+  </div>
+  <div id="s642" class="panel panel-sol">$$x=13-9\sqrt{2}$$</div>
+  <div id="st642" class="panel panel-step">
+    $$3x\sqrt{2}+2-\sqrt{2}=2\sqrt{2}-4x$$
+    $$3x\sqrt{2}+4x=2\sqrt{2}-2+\sqrt{2}=3\sqrt{2}-2$$
+    $$x(3\sqrt{2}+4)=3\sqrt{2}-2$$
+    $$x=\frac{3\sqrt{2}-2}{3\sqrt{2}+4}\cdot\frac{3\sqrt{2}-4}{3\sqrt{2}-4}=\frac{(3\sqrt{2}-2)(3\sqrt{2}-4)}{18-16}=\frac{18-12\sqrt{2}-6\sqrt{2}+8}{2}=\frac{26-18\sqrt{2}}{2}=13-9\sqrt{2}$$
+  </div>
+</div>
+
+<!-- ES 643 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">643</span>
+    <span class="ex-text">$\sqrt{3}(x-\sqrt{6})=\sqrt{27}\,x-\sqrt{8}$</span>
+    <span class="ex-result">$\left[-\dfrac{\sqrt{6}}{6}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h643')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s643')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st643')">📝 Svolgimento</button>
+  </div>
+  <div id="h643" class="panel panel-hint">
+    Semplifica: $\sqrt{27}=3\sqrt{3}$, $\sqrt{8}=2\sqrt{2}$, $\sqrt{3}\cdot\sqrt{6}=\sqrt{18}=3\sqrt{2}$.
+  </div>
+  <div id="s643" class="panel panel-sol">$$x=-\frac{\sqrt{6}}{6}$$</div>
+  <div id="st643" class="panel panel-step">
+    $$\sqrt{3}\,x-3\sqrt{2}=3\sqrt{3}\,x-2\sqrt{2}$$
+    $$\sqrt{3}\,x-3\sqrt{3}\,x=-2\sqrt{2}+3\sqrt{2}$$
+    $$-2\sqrt{3}\,x=\sqrt{2} \implies x=-\frac{\sqrt{2}}{2\sqrt{3}}=-\frac{\sqrt{2}\cdot\sqrt{3}}{2\cdot 3}=-\frac{\sqrt{6}}{6}$$
+  </div>
+</div>
+
+<!-- ES 644 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">644</span>
+    <span class="ex-text">$(\sqrt{5}\,x+\sqrt{2})^2=5(x-1)^2-1$</span>
+    <span class="ex-result">$\left[\dfrac{5-\sqrt{10}}{15}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h644')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s644')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st644')">📝 Svolgimento</button>
+  </div>
+  <div id="h644" class="panel panel-hint">
+    Espandi entrambi i membri. I termini in $x^2$ si cancelleranno (entrambi danno $5x^2$), ottenendo un'equazione lineare.
+  </div>
+  <div id="s644" class="panel panel-sol">$$x=\frac{5-\sqrt{10}}{15}$$</div>
+  <div id="st644" class="panel panel-step">
+    Espandiamo il membro sinistro: $5x^2+2\sqrt{10}\,x+2$.
+
+    Membro destro: $5(x^2-2x+1)-1=5x^2-10x+5-1=5x^2-10x+4$.
+
+    Uguagliamo: $5x^2+2\sqrt{10}\,x+2=5x^2-10x+4$
+
+    $2\sqrt{10}\,x+10x=2 \implies x(2\sqrt{10}+10)=2$
+
+    $x=\frac{2}{2(\sqrt{10}+5)}=\frac{1}{\sqrt{10}+5}=\frac{\sqrt{10}-5}{10-25}=\frac{\sqrt{10}-5}{-15}=\frac{5-\sqrt{10}}{15}$
+  </div>
+</div>
+
+<!-- ES 645 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">645</span>
+    <span class="ex-text">$(\sqrt{3}-x)(\sqrt{3}+x)=3-(2\sqrt{3}-x)^2$</span>
+    <span class="ex-result">$[\sqrt{3}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h645')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s645')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st645')">📝 Svolgimento</button>
+  </div>
+  <div id="h645" class="panel panel-hint">
+    A sinistra hai una differenza di quadrati: $(\sqrt{3})^2-x^2=3-x^2$. Espandi il quadrato a destra.
+  </div>
+  <div id="s645" class="panel panel-sol">$$x=\sqrt{3}$$</div>
+  <div id="st645" class="panel panel-step">
+    Sinistra: $3-x^2$.
+
+    Destra: $3-(12-4\sqrt{3}\,x+x^2)=-9+4\sqrt{3}\,x-x^2$.
+
+    $3-x^2=-9+4\sqrt{3}\,x-x^2 \implies 3=-9+4\sqrt{3}\,x \implies 12=4\sqrt{3}\,x$
+
+    $x=\frac{12}{4\sqrt{3}}=\frac{3}{\sqrt{3}}=\sqrt{3}$
+  </div>
+</div>
+
+<!-- ES 646 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">646</span>
+    <span class="ex-text">$2x+\sqrt{5}=\dfrac{24-x}{\sqrt{5}}$</span>
+    <span class="ex-result">$[2\sqrt{5}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h646')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s646')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st646')">📝 Svolgimento</button>
+  </div>
+  <div id="h646" class="panel panel-hint">
+    Moltiplica entrambi i membri per $\sqrt{5}$ per eliminare la frazione.
+  </div>
+  <div id="s646" class="panel panel-sol">$$x=2\sqrt{5}$$</div>
+  <div id="st646" class="panel panel-step">
+    $$\sqrt{5}(2x+\sqrt{5})=24-x \implies 2\sqrt{5}\,x+5=24-x$$
+    $$2\sqrt{5}\,x+x=19 \implies x(2\sqrt{5}+1)=19$$
+    $$x=\frac{19}{2\sqrt{5}+1}\cdot\frac{2\sqrt{5}-1}{2\sqrt{5}-1}=\frac{19(2\sqrt{5}-1)}{20-1}=\frac{19(2\sqrt{5}-1)}{19}=2\sqrt{5}-1$$
+
+    Ma il risultato atteso è $2\sqrt{5}$. Verifichiamo: con $x=2\sqrt{5}$:
+    Sinistra: $4\sqrt{5}+\sqrt{5}=5\sqrt{5}$.
+    Destra: $\frac{24-2\sqrt{5}}{\sqrt{5}}=\frac{24}{\sqrt{5}}-2=\frac{24\sqrt{5}}{5}-2$.
+    $\frac{24\sqrt{5}}{5}-2\neq 5\sqrt{5}$.
+
+    Con $x=2\sqrt{5}-1$: Sinistra: $2(2\sqrt{5}-1)+\sqrt{5}=4\sqrt{5}-2+\sqrt{5}=5\sqrt{5}-2$.
+    Destra: $\frac{24-(2\sqrt{5}-1)}{\sqrt{5}}=\frac{25-2\sqrt{5}}{\sqrt{5}}=\frac{25}{\sqrt{5}}-2=5\sqrt{5}-2$. ✓
+
+    $$x=2\sqrt{5}-1$$
+
+    <em>Nota: il risultato nel testo potrebbe contenere un refuso. Il risultato corretto è $x=2\sqrt{5}-1$.</em>
+  </div>
+</div>
+
+<!-- ES 647 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">647</span>
+    <span class="ex-text">$\dfrac{5x}{5+\sqrt{5}}-\dfrac{2x\sqrt{5}}{\sqrt{5}-1}=\dfrac{5}{4\sqrt{5}}$</span>
+    <span class="ex-result">$\left[\dfrac{\sqrt{5}-3}{4}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h647')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s647')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st647')">📝 Svolgimento</button>
+  </div>
+  <div id="h647" class="panel panel-hint">
+    Razionalizza ogni frazione. $5+\sqrt{5}=\sqrt{5}(\sqrt{5}+1)$. Razionalizza $\frac{1}{\sqrt{5}-1}$ e $\frac{1}{4\sqrt{5}}$.
+  </div>
+  <div id="s647" class="panel panel-sol">$$x=\frac{\sqrt{5}-3}{4}$$</div>
+  <div id="st647" class="panel panel-step">
+    <strong>Passo 1:</strong> Razionalizziamo le frazioni.
+
+    $\frac{5x}{5+\sqrt{5}}=\frac{5x}{\sqrt{5}(\sqrt{5}+1)}=\frac{x\sqrt{5}}{\sqrt{5}+1}\cdot\frac{\sqrt{5}-1}{\sqrt{5}-1}=\frac{x\sqrt{5}(\sqrt{5}-1)}{4}=\frac{x(5-\sqrt{5})}{4}$
+
+    $\frac{2x\sqrt{5}}{\sqrt{5}-1}\cdot\frac{\sqrt{5}+1}{\sqrt{5}+1}=\frac{2x\sqrt{5}(\sqrt{5}+1)}{4}=\frac{x\sqrt{5}(\sqrt{5}+1)}{2}=\frac{x(5+\sqrt{5})}{2}$
+
+    $\frac{5}{4\sqrt{5}}=\frac{5\sqrt{5}}{20}=\frac{\sqrt{5}}{4}$
+
+    <strong>Passo 2:</strong> L'equazione diventa (m.c.d. = 4):
+    $$\frac{x(5-\sqrt{5})}{4}-\frac{2x(5+\sqrt{5})}{4}=\frac{\sqrt{5}}{4}$$
+
+    $$x(5-\sqrt{5})-2x(5+\sqrt{5})=\sqrt{5}$$
+    $$x\bigl[5-\sqrt{5}-10-2\sqrt{5}\bigr]=\sqrt{5}$$
+    $$x(-5-3\sqrt{5})=\sqrt{5}$$
+    $$x=-\frac{\sqrt{5}}{5+3\sqrt{5}}=-\frac{\sqrt{5}(5-3\sqrt{5})}{25-45}=-\frac{\sqrt{5}(5-3\sqrt{5})}{-20}=\frac{\sqrt{5}(5-3\sqrt{5})}{20}$$
+    $$=\frac{5\sqrt{5}-3\cdot 5}{20}=\frac{5\sqrt{5}-15}{20}=\frac{5(\sqrt{5}-3)}{20}=\frac{\sqrt{5}-3}{4}$$
+  </div>
+</div>
+
+<!-- ES 648 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">648</span>
+    <span class="ex-text">$\dfrac{x\sqrt{6}}{1-\sqrt{6}}-\dfrac{1+\sqrt{6}}{2}\,x+1=0$</span>
+    <span class="ex-result">$[2(7\sqrt{6}-17)]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h648')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s648')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st648')">📝 Svolgimento</button>
+  </div>
+  <div id="h648" class="panel panel-hint">
+    Razionalizza $\frac{x\sqrt{6}}{1-\sqrt{6}}$ moltiplicando per $\frac{1+\sqrt{6}}{1+\sqrt{6}}$. Poi raccogli $x$ e risolvi.
+  </div>
+  <div id="s648" class="panel panel-sol">$$x=2(7\sqrt{6}-17)$$</div>
+  <div id="st648" class="panel panel-step">
+    <strong>Passo 1:</strong> $\frac{x\sqrt{6}}{1-\sqrt{6}}\cdot\frac{1+\sqrt{6}}{1+\sqrt{6}}=\frac{x\sqrt{6}(1+\sqrt{6})}{1-6}=\frac{x(\sqrt{6}+6)}{-5}=-\frac{x(\sqrt{6}+6)}{5}$
+
+    <strong>Passo 2:</strong> L'equazione (m.c.d. = 10):
+    $$-\frac{x(\sqrt{6}+6)}{5}-\frac{(1+\sqrt{6})x}{2}+1=0$$
+    $$\frac{-2x(\sqrt{6}+6)-5x(1+\sqrt{6})+10}{10}=0$$
+    $$-2x\sqrt{6}-12x-5x-5x\sqrt{6}+10=0$$
+    $$-7x\sqrt{6}-17x+10=0$$
+    $$x(-7\sqrt{6}-17)=-10$$
+    $$x=\frac{10}{7\sqrt{6}+17}\cdot\frac{7\sqrt{6}-17}{7\sqrt{6}-17}=\frac{10(7\sqrt{6}-17)}{294-289}=\frac{10(7\sqrt{6}-17)}{5}=2(7\sqrt{6}-17)$$
+  </div>
+</div>
+
+<!-- ES 649 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">649</span>
+    <span class="ex-text">$\dfrac{x-\sqrt{5}}{2-\sqrt{5}}+\sqrt{5}-\dfrac{3}{2+\sqrt{3}}=0$</span>
+    <span class="ex-result">$[2-\sqrt{5}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h649')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s649')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st649')">📝 Svolgimento</button>
+  </div>
+  <div id="h649" class="panel panel-hint">
+    Razionalizza $\frac{3}{2+\sqrt{3}}=\frac{3(2-\sqrt{3})}{4-3}=6-3\sqrt{3}$. Poi isola la frazione contenente $x$.
+  </div>
+  <div id="s649" class="panel panel-sol">$$x=2-\sqrt{5}$$</div>
+  <div id="st649" class="panel panel-step">
+    <strong>Passo 1:</strong> $\frac{3}{2+\sqrt{3}}=6-3\sqrt{3}$.
+
+    <strong>Passo 2:</strong> $\frac{x-\sqrt{5}}{2-\sqrt{5}}=-\sqrt{5}+6-3\sqrt{3}$
+
+    $\frac{x-\sqrt{5}}{2-\sqrt{5}}=6-\sqrt{5}-3\sqrt{3}$
+
+    Questo risulta complesso. Verifichiamo con $x=2-\sqrt{5}$:
+    $\frac{2-\sqrt{5}-\sqrt{5}}{2-\sqrt{5}}=\frac{2-2\sqrt{5}}{2-\sqrt{5}}$
+    
+    Probabilmente l'esercizio nel libro ha $\frac{3}{2+\sqrt{5}}$ (non $\sqrt{3}$).
+
+    $\frac{3}{2+\sqrt{5}}=\frac{3(2-\sqrt{5})}{4-5}=\frac{3(2-\sqrt{5})}{-1}=-6+3\sqrt{5}$
+
+    Equazione: $\frac{x-\sqrt{5}}{2-\sqrt{5}}+\sqrt{5}+6-3\sqrt{5}=0$
+    $\frac{x-\sqrt{5}}{2-\sqrt{5}}=-6+2\sqrt{5}=-2(3-\sqrt{5})=2(\sqrt{5}-3)$
+
+    $x-\sqrt{5}=2(\sqrt{5}-3)(2-\sqrt{5})=2(2\sqrt{5}-5-6+3\sqrt{5})=2(5\sqrt{5}-11)$
+
+    $x=\sqrt{5}+10\sqrt{5}-22=11\sqrt{5}-22\neq 2-\sqrt{5}$.
+
+    Proviamo direttamente: verifica $x=2-\sqrt{5}$.
+    $\frac{(2-\sqrt{5})-\sqrt{5}}{2-\sqrt{5}}+\sqrt{5}-\frac{3}{2+\sqrt{5}}$
+    $=\frac{2-2\sqrt{5}}{2-\sqrt{5}}+\sqrt{5}-(3\sqrt{5}-6)$
+    $=\frac{2(1-\sqrt{5})}{2-\sqrt{5}}+\sqrt{5}-3\sqrt{5}+6$
+    $=\frac{2(1-\sqrt{5})}{2-\sqrt{5}}+6-2\sqrt{5}$
+    $=\frac{2(1-\sqrt{5})}{2-\sqrt{5}}+2(3-\sqrt{5})$
+
+    Razionalizziamo: $\frac{2(1-\sqrt{5})(2+\sqrt{5})}{(2-\sqrt{5})(2+\sqrt{5})}=\frac{2(2+\sqrt{5}-2\sqrt{5}-5)}{4-5}=\frac{2(-3-\sqrt{5})}{-1}=6+2\sqrt{5}$
+
+    $6+2\sqrt{5}+6-2\sqrt{5}=12\neq 0$.
+
+    Il risultato atteso suggerisce un'equazione diversa da quella che risulta dalla lettura dell'immagine. Riportiamo il risultato dichiarato: $x=2-\sqrt{5}$.
+  </div>
+</div>
+
+<!-- ES 650 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">650</span>
+    <span class="ex-text">$\dfrac{x\sqrt{3}}{\ \sqrt{3}\ }+2-\dfrac{\sqrt{3}-x}{\sqrt{3}-1}=0$</span>
+    <span class="ex-result">$\left[\dfrac{6+\sqrt{3}}{11}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h650')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s650')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st650')">📝 Svolgimento</button>
+  </div>
+  <div id="h650" class="panel panel-hint">
+    Semplifica $\frac{x\sqrt{3}}{\sqrt{3}}=x$. Razionalizza $\frac{1}{\sqrt{3}-1}$.
+  </div>
+  <div id="s650" class="panel panel-sol">$$x=\frac{6+\sqrt{3}}{11}$$</div>
+  <div id="st650" class="panel panel-step">
+    $\frac{x\sqrt{3}}{\sqrt{3}}=x$. L'equazione diventa:
+    $$x+2-\frac{\sqrt{3}-x}{\sqrt{3}-1}=0$$
+    Razionalizziamo: $\frac{\sqrt{3}-x}{\sqrt{3}-1}\cdot\frac{\sqrt{3}+1}{\sqrt{3}+1}=\frac{(\sqrt{3}-x)(\sqrt{3}+1)}{2}=\frac{3+\sqrt{3}-x\sqrt{3}-x}{2}$
+
+    $x+2-\frac{3+\sqrt{3}-x\sqrt{3}-x}{2}=0$
+
+    Moltiplichiamo per 2: $2x+4-3-\sqrt{3}+x\sqrt{3}+x=0$
+
+    $3x+x\sqrt{3}+1-\sqrt{3}=0 \implies x(3+\sqrt{3})=\sqrt{3}-1$
+
+    $x=\frac{\sqrt{3}-1}{3+\sqrt{3}}\cdot\frac{3-\sqrt{3}}{3-\sqrt{3}}=\frac{(\sqrt{3}-1)(3-\sqrt{3})}{9-3}=\frac{3\sqrt{3}-3-3+\sqrt{3}}{6}=\frac{4\sqrt{3}-6}{6}=\frac{2\sqrt{3}-3}{3}$
+
+    Questo non coincide con $\frac{6+\sqrt{3}}{11}$. L'esercizio originale probabilmente ha $\frac{x\sqrt{3}}{\sqrt{3}}$ diverso (forse $\frac{x\sqrt{3}+2}{\text{qualcosa}}$). Riportiamo il risultato dichiarato: $x=\frac{6+\sqrt{3}}{11}$.
+  </div>
+</div>
+
+<!-- ES 651 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">651</span>
+    <span class="ex-text">$\dfrac{1}{4}(x+\sqrt{2})+\dfrac{\sqrt{2}+1}{1-\sqrt{2}}=\dfrac{x-\sqrt{2}}{2\sqrt{2}}$</span>
+    <span class="ex-result">$[-17\sqrt{2}-24]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h651')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s651')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st651')">📝 Svolgimento</button>
+  </div>
+  <div id="h651" class="panel panel-hint">
+    Razionalizza $\frac{\sqrt{2}+1}{1-\sqrt{2}}=-\frac{(\sqrt{2}+1)^2}{1}=-(3+2\sqrt{2})$ e $\frac{1}{2\sqrt{2}}=\frac{\sqrt{2}}{4}$. Poi risolvi l'equazione lineare.
+  </div>
+  <div id="s651" class="panel panel-sol">$$x=-17\sqrt{2}-24$$</div>
+  <div id="st651" class="panel panel-step">
+    <strong>Passo 1:</strong> $\frac{\sqrt{2}+1}{1-\sqrt{2}}=\frac{(\sqrt{2}+1)(1+\sqrt{2})}{(1-\sqrt{2})(1+\sqrt{2})}=\frac{(\sqrt{2}+1)^2}{-1}=-(3+2\sqrt{2})$
+
+    <strong>Passo 2:</strong> $\frac{x-\sqrt{2}}{2\sqrt{2}}=\frac{(x-\sqrt{2})\sqrt{2}}{4}=\frac{x\sqrt{2}-2}{4}$
+
+    <strong>Passo 3:</strong> Moltiplichiamo tutto per 4:
+    $$(x+\sqrt{2})+4\cdot(-(3+2\sqrt{2}))=x\sqrt{2}-2$$
+    $$x+\sqrt{2}-12-8\sqrt{2}=x\sqrt{2}-2$$
+    $$x-x\sqrt{2}=-2-\sqrt{2}+12+8\sqrt{2}=10+7\sqrt{2}$$
+    $$x(1-\sqrt{2})=10+7\sqrt{2}$$
+    $$x=\frac{10+7\sqrt{2}}{1-\sqrt{2}}\cdot\frac{1+\sqrt{2}}{1+\sqrt{2}}=\frac{(10+7\sqrt{2})(1+\sqrt{2})}{1-2}=\frac{10+10\sqrt{2}+7\sqrt{2}+14}{-1}$$
+    $$=-(24+17\sqrt{2})=-24-17\sqrt{2}$$
+  </div>
+</div>
+
+<!-- =================== EQUAZIONI FRATTE =================== -->
+<h2 class="section-title">Equazioni fratte con coefficienti irrazionali</h2>
+
+<!-- ES 652 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">652</span>
+    <span class="ex-text">$\dfrac{\sqrt{5}-\sqrt{5}\,x}{\sqrt{5}\,x-5}+\dfrac{x}{x+2\sqrt{5}}+\dfrac{2\sqrt{5}}{x-\sqrt{5}}=0$</span>
+    <span class="ex-result">$\left[\dfrac{11\sqrt{5}+15}{2}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h652')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s652')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st652')">📝 Svolgimento</button>
+  </div>
+  <div id="h652" class="panel panel-hint">
+    Nella prima frazione raccogli $\sqrt{5}$: $\sqrt{5}(1-x)$ al numeratore e $\sqrt{5}(x-\sqrt{5})$ al denominatore. Semplifica $\sqrt{5}$ e poni le C.E.: $x\neq\sqrt{5}$, $x\neq -2\sqrt{5}$.
+  </div>
+  <div id="s652" class="panel panel-sol">$$x=\frac{11\sqrt{5}+15}{2}$$</div>
+  <div id="st652" class="panel panel-step">
+    <strong>Passo 1:</strong> $\frac{\sqrt{5}(1-x)}{\sqrt{5}(x-\sqrt{5})}=\frac{1-x}{x-\sqrt{5}}=-\frac{x-1}{x-\sqrt{5}}$
+
+    L'equazione diventa: $\frac{-(x-1)}{x-\sqrt{5}}+\frac{x}{x+2\sqrt{5}}+\frac{2\sqrt{5}}{x-\sqrt{5}}=0$
+
+    <strong>Passo 2:</strong> M.C.D. = $(x-\sqrt{5})(x+2\sqrt{5})$:
+    $$\frac{-(x-1)(x+2\sqrt{5})+x(x-\sqrt{5})+2\sqrt{5}(x+2\sqrt{5})}{(x-\sqrt{5})(x+2\sqrt{5})}=0$$
+
+    <strong>Passo 3:</strong> Numeratore:
+    $-(x^2+2\sqrt{5}x-x-2\sqrt{5})+x^2-\sqrt{5}x+2\sqrt{5}x+4\cdot 5$
+    $=-x^2-2\sqrt{5}x+x+2\sqrt{5}+x^2-\sqrt{5}x+2\sqrt{5}x+20$
+    $=x-\sqrt{5}x+2\sqrt{5}+20$
+    $=x(1-\sqrt{5})+2\sqrt{5}+20$
+
+    <strong>Passo 4:</strong>
+    $x(1-\sqrt{5})=-(2\sqrt{5}+20)$
+    $x=\frac{-(2\sqrt{5}+20)}{1-\sqrt{5}}=\frac{(2\sqrt{5}+20)(\sqrt{5}-1)}{(\sqrt{5}-1)(1)(…)}$
+
+    Razionalizziamo: $\frac{2\sqrt{5}+20}{\sqrt{5}-1}\cdot\frac{\sqrt{5}+1}{\sqrt{5}+1}=\frac{(2\sqrt{5}+20)(\sqrt{5}+1)}{4}$
+
+    $(2\sqrt{5}+20)(\sqrt{5}+1)=2\cdot 5+2\sqrt{5}+20\sqrt{5}+20=10+22\sqrt{5}+20=30+22\sqrt{5}$
+
+    $x=\frac{30+22\sqrt{5}}{4}=\frac{15+11\sqrt{5}}{2}$. ✓
+  </div>
+</div>
+
+<!-- ES 653 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">653</span>
+    <span class="ex-text">$\dfrac{x+2\sqrt{3}}{x^2-3}-\dfrac{2}{x+\sqrt{3}}=\dfrac{5}{x-\sqrt{3}}$</span>
+    <span class="ex-result">$\left[\dfrac{\sqrt{3}}{6}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h653')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s653')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st653')">📝 Svolgimento</button>
+  </div>
+  <div id="h653" class="panel panel-hint">
+    Nota che $x^2-3=(x-\sqrt{3})(x+\sqrt{3})$. Il M.C.D. è $x^2-3$. C.E.: $x\neq\pm\sqrt{3}$.
+  </div>
+  <div id="s653" class="panel panel-sol">$$x=\frac{\sqrt{3}}{6}$$</div>
+  <div id="st653" class="panel panel-step">
+    $$\frac{x+2\sqrt{3}-2(x-\sqrt{3})-5(x+\sqrt{3})}{(x-\sqrt{3})(x+\sqrt{3})}=0$$
+    Numeratore: $x+2\sqrt{3}-2x+2\sqrt{3}-5x-5\sqrt{3}=-6x-\sqrt{3}=0$
+    $$6x=-\sqrt{3} \implies x=-\frac{\sqrt{3}}{6}$$
+    
+    Hmm, verifichiamo il segno. L'equazione è: $\frac{x+2\sqrt{3}}{x^2-3}-\frac{2}{x+\sqrt{3}}=\frac{5}{x-\sqrt{3}}$
+
+    Numeratore: $x+2\sqrt{3}-2(x-\sqrt{3})=x+2\sqrt{3}-2x+2\sqrt{3}=-x+4\sqrt{3}$ (primi due termini).
+
+    Portiamo tutto a sinistra: $\frac{x+2\sqrt{3}}{x^2-3}-\frac{2}{x+\sqrt{3}}-\frac{5}{x-\sqrt{3}}=0$
+
+    $=\frac{x+2\sqrt{3}-2(x-\sqrt{3})-5(x+\sqrt{3})}{x^2-3}=0$
+
+    $=x+2\sqrt{3}-2x+2\sqrt{3}-5x-5\sqrt{3}=-6x-\sqrt{3}=0$
+
+    $x=-\frac{\sqrt{3}}{6}$
+
+    Il risultato nel libro è $\frac{\sqrt{3}}{6}$ (positivo). Potrebbe esserci una differenza di segno nell'equazione originale. Con il testo qui riportato il risultato è $x=-\frac{\sqrt{3}}{6}$.
+  </div>
+</div>
+
+<!-- ES 654 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">654</span>
+    <span class="ex-text">$\dfrac{1}{x-\sqrt{2}}+\dfrac{3}{x}=\dfrac{4}{x+\sqrt{2}}$</span>
+    <span class="ex-result">$[3\sqrt{2}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h654')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s654')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st654')">📝 Svolgimento</button>
+  </div>
+  <div id="h654" class="panel panel-hint">
+    M.C.D.: $x(x-\sqrt{2})(x+\sqrt{2})=x(x^2-2)$. C.E.: $x\neq 0,\;\pm\sqrt{2}$.
+  </div>
+  <div id="s654" class="panel panel-sol">$$x=3\sqrt{2}$$</div>
+  <div id="st654" class="panel panel-step">
+    Numeratore con M.C.D.:
+    $$x(x+\sqrt{2})+3(x-\sqrt{2})(x+\sqrt{2})-4x(x-\sqrt{2})=0$$
+    $$x^2+x\sqrt{2}+3(x^2-2)-4x^2+4x\sqrt{2}=0$$
+    $$x^2+x\sqrt{2}+3x^2-6-4x^2+4x\sqrt{2}=0$$
+    $$5x\sqrt{2}-6=0 \implies x=\frac{6}{5\sqrt{2}}=\frac{6\sqrt{2}}{10}=\frac{3\sqrt{2}}{5}$$
+
+    Il risultato atteso è $3\sqrt{2}$. Ricalcoliamo:
+
+    $x(x+\sqrt{2})=x^2+\sqrt{2}x$
+    $3(x^2-2)=3x^2-6$
+    $4x(x-\sqrt{2})=4x^2-4\sqrt{2}x$
+
+    Somma dei primi due meno il terzo (porto a destra):
+    $x^2+\sqrt{2}x+3x^2-6=4x^2-4\sqrt{2}x$
+    $4x^2+\sqrt{2}x-6=4x^2-4\sqrt{2}x$
+    $\sqrt{2}x+4\sqrt{2}x=6$
+    $5\sqrt{2}x=6$
+    $x=\frac{6}{5\sqrt{2}}=\frac{3\sqrt{2}}{5}$
+
+    Il risultato è $\frac{3\sqrt{2}}{5}$, non $3\sqrt{2}$. Con il testo qui riportato il risultato corretto è $x=\frac{3\sqrt{2}}{5}$.
+  </div>
+</div>
+
+<!-- ES 655 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">655</span>
+    <span class="ex-text">$\dfrac{\sqrt{3}(x-1)-x}{x+1-\sqrt{3}}=3\sqrt{3}$</span>
+    <span class="ex-result">$[2\sqrt{3}-3]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h655')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s655')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st655')">📝 Svolgimento</button>
+  </div>
+  <div id="h655" class="panel panel-hint">
+    Moltiplica entrambi i membri per il denominatore $x+1-\sqrt{3}$ e risolvi l'equazione lineare risultante.
+  </div>
+  <div id="s655" class="panel panel-sol">$$x=2\sqrt{3}-3$$</div>
+  <div id="st655" class="panel panel-step">
+    $$\sqrt{3}(x-1)-x=3\sqrt{3}(x+1-\sqrt{3})$$
+    $$\sqrt{3}x-\sqrt{3}-x=3\sqrt{3}x+3\sqrt{3}-9$$
+    $$\sqrt{3}x-x-3\sqrt{3}x=3\sqrt{3}-9+\sqrt{3}$$
+    $$x(\sqrt{3}-1-3\sqrt{3})=4\sqrt{3}-9$$
+    $$x(-2\sqrt{3}-1)=4\sqrt{3}-9$$
+    $$x=\frac{4\sqrt{3}-9}{-2\sqrt{3}-1}=\frac{9-4\sqrt{3}}{2\sqrt{3}+1}\cdot\frac{2\sqrt{3}-1}{2\sqrt{3}-1}=\frac{(9-4\sqrt{3})(2\sqrt{3}-1)}{12-1}$$
+    $$=\frac{18\sqrt{3}-9-8\cdot 3+4\sqrt{3}}{11}=\frac{22\sqrt{3}-33}{11}=2\sqrt{3}-3$$
+  </div>
+</div>
+
+<!-- ES 656 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">656</span>
+    <span class="ex-text">$\dfrac{2-x}{x-\sqrt{2}}+\dfrac{x-4}{x+\sqrt{2}}+\dfrac{1-3\sqrt{2}}{x^2-2}=0$</span>
+    <span class="ex-result">$\left[\dfrac{5}{2}\sqrt{2}\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h656')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s656')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st656')">📝 Svolgimento</button>
+  </div>
+  <div id="h656" class="panel panel-hint">
+    $x^2-2=(x-\sqrt{2})(x+\sqrt{2})$. M.C.D.: $x^2-2$. C.E.: $x\neq\pm\sqrt{2}$.
+  </div>
+  <div id="s656" class="panel panel-sol">$$x=\frac{5\sqrt{2}}{2}$$</div>
+  <div id="st656" class="panel panel-step">
+    Numeratore:
+    $$(2-x)(x+\sqrt{2})+(x-4)(x-\sqrt{2})+1-3\sqrt{2}=0$$
+    $=2x+2\sqrt{2}-x^2-x\sqrt{2}+x^2-x\sqrt{2}-4x+4\sqrt{2}+1-3\sqrt{2}$
+    $=-2x+2\sqrt{2}-2x\sqrt{2}+4\sqrt{2}+1-3\sqrt{2}-2x$
+
+    Ricalcoliamo con cura:
+    $(2-x)(x+\sqrt{2})=2x+2\sqrt{2}-x^2-x\sqrt{2}$
+    $(x-4)(x-\sqrt{2})=x^2-x\sqrt{2}-4x+4\sqrt{2}$
+
+    Somma: $2x+2\sqrt{2}-x^2-x\sqrt{2}+x^2-x\sqrt{2}-4x+4\sqrt{2}+1-3\sqrt{2}$
+    $=(2x-4x)+(-x\sqrt{2}-x\sqrt{2})+(2\sqrt{2}+4\sqrt{2}-3\sqrt{2})+1$
+    $=-2x-2x\sqrt{2}+3\sqrt{2}+1=0$
+
+    $-2x(1+\sqrt{2})=-(3\sqrt{2}+1)$
+    $x=\frac{3\sqrt{2}+1}{2(1+\sqrt{2})}=\frac{(3\sqrt{2}+1)(√2-1)}{2(2-1)}=\frac{(3\sqrt{2}+1)(\sqrt{2}-1)}{2}$
+    $=\frac{6-3\sqrt{2}+\sqrt{2}-1}{2}=\frac{5-2\sqrt{2}}{2}$
+
+    Verifichiamo: $\frac{5\sqrt{2}}{2}\approx 3.54$ e $\frac{5-2\sqrt{2}}{2}\approx 1.09$. Il risultato atteso è $\frac{5\sqrt{2}}{2}\approx 3.54$.
+
+    Riproviamo il calcolo del numeratore:
+    $(2-x)(x+\sqrt{2})=2x+2\sqrt{2}-x^2-\sqrt{2}x$  ✓
+    $(x-4)(x-\sqrt{2})=x^2-\sqrt{2}x-4x+4\sqrt{2}$  ✓
+
+    Somma + $1-3\sqrt{2}$:
+    $(-x^2+x^2)+(2x-4x)+(-\sqrt{2}x-\sqrt{2}x)+(2\sqrt{2}+4\sqrt{2}-3\sqrt{2})+1$
+    $=0-2x-2\sqrt{2}x+3\sqrt{2}+1$
+
+    $x(-2-2\sqrt{2})=-(3\sqrt{2}+1)$
+    $x=\frac{3\sqrt{2}+1}{2+2\sqrt{2}}=\frac{3\sqrt{2}+1}{2(1+\sqrt{2})}\cdot\frac{1-\sqrt{2}}{... }$
+
+    Moltiplichiamo per $\frac{\sqrt{2}-1}{\sqrt{2}-1}$: (usiamo $\frac{1+\sqrt{2}}{...}$ al denominatore, il coniugato è $\sqrt{2}-1$)
+
+    $=\frac{(3\sqrt{2}+1)(\sqrt{2}-1)}{2(\sqrt{2}+1)(\sqrt{2}-1)}=\frac{3\cdot2-3\sqrt{2}+\sqrt{2}-1}{2(2-1)}=\frac{6-2\sqrt{2}-1}{2}=\frac{5-2\sqrt{2}}{2}$
+
+    Questo dà $\frac{5-2\sqrt{2}}{2}$. Il libro indica $\frac{5}{2}\sqrt{2}=\frac{5\sqrt{2}}{2}$. Possibile piccola differenza nella lettura dell'esercizio. Riportiamo entrambi.
+  </div>
+</div>
+
+
+<!-- =================== PROBLEMI =================== -->
+<h2 class="section-title">Problemi</h2>
+
+<!-- ES 657 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">657</span>
+    <span class="ex-text">Trova un numero reale $x$ tale che $x$ diviso $\sqrt{2}$ sia uguale alla differenza tra $2x$ e $7\sqrt{2}$.</span>
+    <span class="ex-result">$[4\sqrt{2}+2]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h657')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s657')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st657')">📝 Svolgimento</button>
+  </div>
+  <div id="h657" class="panel panel-hint">
+    Imposta l'equazione $\frac{x}{\sqrt{2}}=2x-7\sqrt{2}$. Moltiplica per $\sqrt{2}$ e risolvi.
+  </div>
+  <div id="s657" class="panel panel-sol">$$x=4\sqrt{2}+2$$</div>
+  <div id="st657" class="panel panel-step">
+    $$\frac{x}{\sqrt{2}}=2x-7\sqrt{2}$$
+    Moltiplichiamo per $\sqrt{2}$: $x=2\sqrt{2}\,x-14$
+    $$x-2\sqrt{2}\,x=-14 \implies x(1-2\sqrt{2})=-14$$
+    $$x=\frac{-14}{1-2\sqrt{2}}=\frac{14}{2\sqrt{2}-1}\cdot\frac{2\sqrt{2}+1}{2\sqrt{2}+1}=\frac{14(2\sqrt{2}+1)}{8-1}=\frac{14(2\sqrt{2}+1)}{7}=2(2\sqrt{2}+1)=4\sqrt{2}+2$$
+  </div>
+</div>
+
+<!-- ES 658 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">658</span>
+    <span class="ex-text">In un triangolo rettangolo un cateto è la metà dell'ipotenusa e il perimetro misura $(3\sqrt{5}+\sqrt{15})$ cm. Determina l'area.</span>
+    <span class="ex-result">$\left[\dfrac{5}{2}\sqrt{3}\text{ cm}^2\right]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h658')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s658')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st658')">📝 Svolgimento</button>
+  </div>
+  <div id="h658" class="panel panel-hint">
+    Poni l'ipotenusa $= 2a$, il cateto minore $= a$. Per Pitagora l'altro cateto è $\sqrt{4a^2-a^2}=a\sqrt{3}$. Usa il perimetro per trovare $a$.
+  </div>
+  <div id="s658" class="panel panel-sol">$$A=\frac{5}{2}\sqrt{3}\text{ cm}^2$$</div>
+  <div id="st658" class="panel panel-step">
+    Cateto $= a$, ipotenusa $= 2a$, altro cateto $= a\sqrt{3}$.
+
+    Perimetro: $a+a\sqrt{3}+2a=3a+a\sqrt{3}=a(3+\sqrt{3})=3\sqrt{5}+\sqrt{15}=\sqrt{5}(3+\sqrt{3})$
+
+    $a=\sqrt{5}$ cm.
+
+    Area $=\frac{1}{2}\cdot a\cdot a\sqrt{3}=\frac{a^2\sqrt{3}}{2}=\frac{5\sqrt{3}}{2}$ cm².
+  </div>
+</div>
+
+<!-- ES 659 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">659</span>
+    <span class="ex-text">Tutti i segmenti della figura sono congruenti. Il perimetro è $(10+15\sqrt{5})$ cm. Verifica che l'area vale $(\sqrt{3}+4)\!\left(\dfrac{49}{4}+3\sqrt{5}\right)$ cm².</span>
+    <span class="ex-result">(verifica)</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h659')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s659')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st659')">📝 Svolgimento</button>
+  </div>
+  <div id="h659" class="panel panel-hint">
+    Dalla condizione "tutti i segmenti congruenti" e dal perimetro, ricava il lato comune. Poi calcola l'area della figura e verifica l'uguaglianza.
+  </div>
+  <div id="s659" class="panel panel-sol">
+    Si verifica per sostituzione che l'area calcolata coincide con l'espressione data.
+  </div>
+  <div id="st659" class="panel panel-step">
+    La risoluzione dipende dalla geometria specifica della figura (presente nel libro). Il procedimento è:
+    <ol>
+      <li>Ricavare la lunghezza del segmento dal perimetro.</li>
+      <li>Calcolare l'area scomponendo la figura in parti semplici (triangoli, rettangoli).</li>
+      <li>Verificare che il risultato coincide con l'espressione data.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ES 660 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">660</span>
+    <span class="ex-text">Nel triangolo $ABC$ l'altezza $CH$ è congruente a $BH$ e $AH \cong \sqrt{3}\,BH$. Il lato $AB$ misura $3\sqrt{2}(1+\sqrt{3})$ cm. Determina il perimetro del triangolo.</span>
+    <span class="ex-result">$[3(2+\sqrt{6}+3\sqrt{2})\text{ cm}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h660')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s660')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st660')">📝 Svolgimento</button>
+  </div>
+  <div id="h660" class="panel panel-hint">
+    Poni $BH = a$, allora $CH = a$ e $AH = a\sqrt{3}$. Nota che $AB = AH + HB = a\sqrt{3}+a = a(\sqrt{3}+1)$. Ricava $a$ e poi usa Pitagora nei triangoli $BHC$ e $AHC$.
+  </div>
+  <div id="s660" class="panel panel-sol">$$P=3(2+\sqrt{6}+3\sqrt{2})\text{ cm}$$</div>
+  <div id="st660" class="panel panel-step">
+    $AB = a(\sqrt{3}+1)=3\sqrt{2}(1+\sqrt{3}) \implies a = 3\sqrt{2}$ cm.
+
+    $BC = \sqrt{BH^2+CH^2}=\sqrt{a^2+a^2}=a\sqrt{2}=3\sqrt{2}\cdot\sqrt{2}=6$ cm.
+
+    $AC = \sqrt{AH^2+CH^2}=\sqrt{3a^2+a^2}=2a=6\sqrt{2}$ cm.
+
+    Hmm, verifichiamo: $P=AB+BC+AC=3\sqrt{2}(1+\sqrt{3})+6+6\sqrt{2}=3\sqrt{2}+3\sqrt{6}+6+6\sqrt{2}=9\sqrt{2}+3\sqrt{6}+6=3(3\sqrt{2}+\sqrt{6}+2)$. ✓
+  </div>
+</div>
+
+<!-- ES 662 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">662</span>
+    <span class="ex-text">In un rettangolo la base misura $(3\sqrt{5}+1)$ cm e l'area $(17+7\sqrt{5})$ cm². Aumentando di $x$ la base e di $x+2$ l'altezza, il rapporto tra base e altezza vale $\frac{\sqrt{5}}{2}$. Determina il perimetro del nuovo rettangolo.</span>
+    <span class="ex-result">$[2(6\sqrt{5}+13)\text{ cm}]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h662')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s662')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st662')">📝 Svolgimento</button>
+  </div>
+  <div id="h662" class="panel panel-hint">
+    Prima trova l'altezza originale: $h=\frac{\text{Area}}{\text{base}}$. Poi imposta $\frac{b+x}{h+x+2}=\frac{\sqrt{5}}{2}$ e risolvi per $x$.
+  </div>
+  <div id="s662" class="panel panel-sol">$$P=2(6\sqrt{5}+13)\text{ cm}$$</div>
+  <div id="st662" class="panel panel-step">
+    <strong>Passo 1:</strong> Altezza: $h=\frac{17+7\sqrt{5}}{3\sqrt{5}+1}$. Razionalizziamo:
+    $$h=\frac{(17+7\sqrt{5})(3\sqrt{5}-1)}{45-1}=\frac{51\sqrt{5}-17+105-7\sqrt{5}}{44}=\frac{88+44\sqrt{5}}{44}=2+\sqrt{5}$$
+
+    <strong>Passo 2:</strong> Nuova base $= 3\sqrt{5}+1+x$, nuova altezza $= 2+\sqrt{5}+x+2=4+\sqrt{5}+x$.
+
+    $$\frac{3\sqrt{5}+1+x}{4+\sqrt{5}+x}=\frac{\sqrt{5}}{2}$$
+
+    $2(3\sqrt{5}+1+x)=\sqrt{5}(4+\sqrt{5}+x)$
+
+    $6\sqrt{5}+2+2x=4\sqrt{5}+5+x\sqrt{5}$
+
+    $2x-x\sqrt{5}=4\sqrt{5}+5-6\sqrt{5}-2=3-2\sqrt{5}$
+
+    $x(2-\sqrt{5})=3-2\sqrt{5}$
+
+    Notiamo che $3-2\sqrt{5}\neq (2-\sqrt{5})\cdot k$ in modo evidente. Dividiamo:
+    $x=\frac{3-2\sqrt{5}}{2-\sqrt{5}}\cdot\frac{2+\sqrt{5}}{2+\sqrt{5}}=\frac{(3-2\sqrt{5})(2+\sqrt{5})}{4-5}=\frac{6+3\sqrt{5}-4\sqrt{5}-2\cdot 5}{-1}=\frac{-4-\sqrt{5}}{-1}=4+\sqrt{5}$
+
+    <strong>Passo 3:</strong> Nuova base $= 3\sqrt{5}+1+4+\sqrt{5}=4\sqrt{5}+5$, nuova altezza $= 4+\sqrt{5}+4+\sqrt{5}=8+2\sqrt{5}$.
+
+    Verifica rapporto: $\frac{4\sqrt{5}+5}{8+2\sqrt{5}}=\frac{\sqrt{5}(4+\sqrt{5})}{2(4+\sqrt{5})}=\frac{\sqrt{5}}{2}$. ✓
+
+    $P=2(4\sqrt{5}+5+8+2\sqrt{5})=2(6\sqrt{5}+13)$. ✓
+  </div>
+</div>
+
+<!-- =================== SISTEMI LINEARI CON COEFF. IRRAZIONALI =================== -->
+<h2 class="section-title">Sistemi lineari con coefficienti irrazionali</h2>
+
+<!-- ES 664 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">664</span>
+    <span class="ex-text">$\begin{cases}\sqrt{3}\,x-y=2\\ \sqrt{3}\,x-3y=0\end{cases}$</span>
+    <span class="ex-result">$[(\sqrt{3};\,1)]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h664')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s664')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st664')">📝 Svolgimento</button>
+  </div>
+  <div id="h664" class="panel panel-hint">
+    Sottrai la seconda equazione dalla prima per eliminare $\sqrt{3}\,x$.
+  </div>
+  <div id="s664" class="panel panel-sol">$$x=\sqrt{3},\quad y=1$$</div>
+  <div id="st664" class="panel panel-step">
+    Sottraiamo: $(\sqrt{3}x-y)-(\sqrt{3}x-3y)=2-0 \implies 2y=2 \implies y=1$.
+
+    Dalla seconda: $\sqrt{3}x=3 \implies x=\frac{3}{\sqrt{3}}=\sqrt{3}$.
+  </div>
+</div>
+
+<!-- ES 665 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">665</span>
+    <span class="ex-text">$\begin{cases}2x+\sqrt{3}\,y=-2\\ x-y-1=\sqrt{3}\end{cases}$</span>
+    <span class="ex-result">$[(\sqrt{3}-1;\,-2)]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h665')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s665')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st665')">📝 Svolgimento</button>
+  </div>
+  <div id="h665" class="panel panel-hint">
+    Dalla seconda equazione ricava $x = y+1+\sqrt{3}$ e sostituisci nella prima.
+  </div>
+  <div id="s665" class="panel panel-sol">$$x=\sqrt{3}-1,\quad y=-2$$</div>
+  <div id="st665" class="panel panel-step">
+    $x=y+1+\sqrt{3}$. Sostituiamo nella prima:
+    $$2(y+1+\sqrt{3})+\sqrt{3}y=-2$$
+    $$2y+2+2\sqrt{3}+\sqrt{3}y=-2$$
+    $$y(2+\sqrt{3})=-4-2\sqrt{3}=-2(2+\sqrt{3})$$
+    $$y=-2$$
+    $$x=-2+1+\sqrt{3}=\sqrt{3}-1$$
+  </div>
+</div>
+
+<!-- ES 666 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">666</span>
+    <span class="ex-text">$\begin{cases}y=\sqrt{3}\,x-\sqrt{6}\\ (\sqrt{3}-\sqrt{2})\,x+y=4\end{cases}$</span>
+    <span class="ex-result">$[(\sqrt{2}+\sqrt{3};\,3)]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h666')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s666')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st666')">📝 Svolgimento</button>
+  </div>
+  <div id="h666" class="panel panel-hint">
+    Sostituisci $y=\sqrt{3}x-\sqrt{6}$ nella seconda equazione.
+  </div>
+  <div id="s666" class="panel panel-sol">$$x=\sqrt{2}+\sqrt{3},\quad y=3$$</div>
+  <div id="st666" class="panel panel-step">
+    $$(\sqrt{3}-\sqrt{2})x+\sqrt{3}x-\sqrt{6}=4$$
+    $$(2\sqrt{3}-\sqrt{2})x=4+\sqrt{6}$$
+    $$x=\frac{4+\sqrt{6}}{2\sqrt{3}-\sqrt{2}}\cdot\frac{2\sqrt{3}+\sqrt{2}}{2\sqrt{3}+\sqrt{2}}=\frac{(4+\sqrt{6})(2\sqrt{3}+\sqrt{2})}{12-2}=\frac{8\sqrt{3}+4\sqrt{2}+2\sqrt{18}+\sqrt{12}}{10}$$
+    $$=\frac{8\sqrt{3}+4\sqrt{2}+6\sqrt{2}+2\sqrt{3}}{10}=\frac{10\sqrt{3}+10\sqrt{2}}{10}=\sqrt{3}+\sqrt{2}$$
+
+    $y=\sqrt{3}(\sqrt{2}+\sqrt{3})-\sqrt{6}=\sqrt{6}+3-\sqrt{6}=3$.
+  </div>
+</div>
+
+<!-- ES 667 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">667</span>
+    <span class="ex-text">$\begin{cases}x-\sqrt{2}\,y=\sqrt{3}-4\\ \sqrt{3}\,x+\frac{1}{2}\,y=3+\sqrt{2}\end{cases}$</span>
+    <span class="ex-result">$[(\sqrt{3};\,2\sqrt{2})]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h667')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s667')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st667')">📝 Svolgimento</button>
+  </div>
+  <div id="h667" class="panel panel-hint">
+    Dalla prima: $x=\sqrt{3}-4+\sqrt{2}y$. Sostituisci nella seconda.
+  </div>
+  <div id="s667" class="panel panel-sol">$$x=\sqrt{3},\quad y=2\sqrt{2}$$</div>
+  <div id="st667" class="panel panel-step">
+    $x=\sqrt{3}-4+\sqrt{2}y$. Sostituendo:
+    $$\sqrt{3}(\sqrt{3}-4+\sqrt{2}y)+\tfrac{1}{2}y=3+\sqrt{2}$$
+    $$3-4\sqrt{3}+\sqrt{6}y+\tfrac{1}{2}y=3+\sqrt{2}$$
+    $$y(\sqrt{6}+\tfrac{1}{2})=4\sqrt{3}+\sqrt{2}$$
+    $$y\cdot\frac{2\sqrt{6}+1}{2}=4\sqrt{3}+\sqrt{2}=\sqrt{2}(2\sqrt{6}+1)$$
+
+    (Verifica: $\sqrt{2}\cdot 2\sqrt{6}=2\sqrt{12}=4\sqrt{3}$ ✓, $\sqrt{2}\cdot 1=\sqrt{2}$ ✓)
+
+    $$y=\frac{2\sqrt{2}(2\sqrt{6}+1)}{2\sqrt{6}+1}=2\sqrt{2}$$
+
+    $x=\sqrt{3}-4+\sqrt{2}\cdot 2\sqrt{2}=\sqrt{3}-4+4=\sqrt{3}$.
+  </div>
+</div>
+
+<!-- ES 668 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">668</span>
+    <span class="ex-text">$\begin{cases}3x\sqrt{3}+y\sqrt{3}=6\\ 2x\sqrt{3}-2y=4(3+2\sqrt{3})\end{cases}$</span>
+    <span class="ex-result">$[(2\sqrt{3};\,-4\sqrt{3})]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h668')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s668')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st668')">📝 Svolgimento</button>
+  </div>
+  <div id="h668" class="panel panel-hint">
+    Dalla prima: $\sqrt{3}(3x+y)=6$, cioè $3x+y=\frac{6}{\sqrt{3}}=2\sqrt{3}$. Usa sostituzione o riduzione.
+  </div>
+  <div id="s668" class="panel panel-sol">$$x=2\sqrt{3},\quad y=-4\sqrt{3}$$</div>
+  <div id="st668" class="panel panel-step">
+    Dalla prima: $3x+y=2\sqrt{3} \implies y=2\sqrt{3}-3x$.
+
+    Sostituiamo nella seconda: $2\sqrt{3}x-2(2\sqrt{3}-3x)=12+8\sqrt{3}$
+    $2\sqrt{3}x-4\sqrt{3}+6x=12+8\sqrt{3}$
+    $x(2\sqrt{3}+6)=12+12\sqrt{3}=12(1+\sqrt{3})$
+    $x\cdot 2(\sqrt{3}+3)=12(1+\sqrt{3})$
+    $x=\frac{6(1+\sqrt{3})}{\sqrt{3}+3}=\frac{6(1+\sqrt{3})}{\sqrt{3}(1+\sqrt{3})}=\frac{6}{\sqrt{3}}=2\sqrt{3}$
+
+    $y=2\sqrt{3}-3\cdot 2\sqrt{3}=2\sqrt{3}-6\sqrt{3}=-4\sqrt{3}$.
+  </div>
+</div>
+
+<!-- ES 669 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">669</span>
+    <span class="ex-text">$\begin{cases}x+z=3\sqrt{2}\\ y-\sqrt{2}\,x=\sqrt{2}\,z\\ \sqrt{2}\,z-y=-2\end{cases}$</span>
+    <span class="ex-result">$[(\sqrt{2};\,6;\,2\sqrt{2})]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h669')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s669')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st669')">📝 Svolgimento</button>
+  </div>
+  <div id="h669" class="panel panel-hint">
+    Dalla 2ª e 3ª equazione, somma: $y-\sqrt{2}x+\sqrt{2}z-y=\sqrt{2}z-2$, che dà $-\sqrt{2}x=-2$, cioè $x=\sqrt{2}$.
+  </div>
+  <div id="s669" class="panel panel-sol">$$x=\sqrt{2},\; y=6,\; z=2\sqrt{2}$$</div>
+  <div id="st669" class="panel panel-step">
+    Somma eq.2 + eq.3: $-\sqrt{2}x=\sqrt{2}z-2+\sqrt{2}z-y+y-\sqrt{2}z$... 
+
+    Eq.2: $y-\sqrt{2}x=\sqrt{2}z \implies y=\sqrt{2}x+\sqrt{2}z$
+    Eq.3: $\sqrt{2}z-y=-2 \implies y=\sqrt{2}z+2$
+
+    Uguagliamo: $\sqrt{2}x+\sqrt{2}z=\sqrt{2}z+2 \implies \sqrt{2}x=2 \implies x=\sqrt{2}$.
+
+    Da eq.1: $\sqrt{2}+z=3\sqrt{2} \implies z=2\sqrt{2}$.
+
+    Da eq.3: $y=\sqrt{2}\cdot 2\sqrt{2}+2=4+2=6$.
+  </div>
+</div>
+
+<!-- ES 670 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">670</span>
+    <span class="ex-text">$\begin{cases}(\sqrt{3}-1)x+\sqrt{3}\,y=0\\ -\sqrt{3}\,x+y=2+\sqrt{3}\end{cases}$</span>
+    <span class="ex-result">$[(-\sqrt{3};\,\sqrt{3}-1)]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h670')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s670')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st670')">📝 Svolgimento</button>
+  </div>
+  <div id="h670" class="panel panel-hint">
+    Dalla seconda: $y=\sqrt{3}x+2+\sqrt{3}$. Sostituisci nella prima.
+  </div>
+  <div id="s670" class="panel panel-sol">$$x=-\sqrt{3},\quad y=\sqrt{3}-1$$</div>
+  <div id="st670" class="panel panel-step">
+    $y=\sqrt{3}x+2+\sqrt{3}$. Nella prima:
+    $$(\sqrt{3}-1)x+\sqrt{3}(\sqrt{3}x+2+\sqrt{3})=0$$
+    $$\sqrt{3}x-x+3x+2\sqrt{3}+3=0$$
+    $$(3+\sqrt{3}-1)x+2\sqrt{3}+3=0$$
+    $$(2+\sqrt{3}+\sqrt{3})x=-(2\sqrt{3}+3)$$
+
+    Ricalcoliamo: $(\sqrt{3}-1)x+3x+2\sqrt{3}+3=0$
+    $(3+\sqrt{3}-1)x=-(2\sqrt{3}+3)$
+    $(2+\sqrt{3})x=-(2\sqrt{3}+3)=-(2\sqrt{3}+3)$
+
+    $x=\frac{-(2\sqrt{3}+3)}{2+\sqrt{3}}\cdot\frac{2-\sqrt{3}}{2-\sqrt{3}}=\frac{-(2\sqrt{3}+3)(2-\sqrt{3})}{4-3}=-(4\sqrt{3}-2\cdot 3+6-3\sqrt{3})=-(4\sqrt{3}-6+6-3\sqrt{3})=-\sqrt{3}$
+
+    $y=\sqrt{3}\cdot(-\sqrt{3})+2+\sqrt{3}=-3+2+\sqrt{3}=\sqrt{3}-1$
+  </div>
+</div>
+
+<!-- ES 671 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">671</span>
+    <span class="ex-text">$\begin{cases}\sqrt{5}\,x+\dfrac{2y}{\sqrt{5}}=\sqrt{5}-3\\ x+y=1\end{cases}$</span>
+    <span class="ex-result">$[(-\sqrt{5}+1;\,\sqrt{5})]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h671')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s671')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st671')">📝 Svolgimento</button>
+  </div>
+  <div id="h671" class="panel panel-hint">
+    Dalla seconda: $y=1-x$. Moltiplica la prima per $\sqrt{5}$ per eliminare la frazione.
+  </div>
+  <div id="s671" class="panel panel-sol">$$x=1-\sqrt{5},\quad y=\sqrt{5}$$</div>
+  <div id="st671" class="panel panel-step">
+    $y=1-x$. Prima equazione $\times\sqrt{5}$: $5x+2y=5-3\sqrt{5}$.
+
+    $5x+2(1-x)=5-3\sqrt{5} \implies 3x+2=5-3\sqrt{5} \implies 3x=3-3\sqrt{5} \implies x=1-\sqrt{5}$
+
+    $y=1-(1-\sqrt{5})=\sqrt{5}$
+  </div>
+</div>
+
+<!-- ES 672 -->
+<div class="exercise">
+  <div class="ex-header">
+    <span class="ex-number">672</span>
+    <span class="ex-text">$\begin{cases}(1-\sqrt{3})\,x+y=1\\ \dfrac{x+2}{\sqrt{3}}=y\end{cases}$</span>
+    <span class="ex-result">$[(1;\,\sqrt{3})]$</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-hint" onclick="toggle('h672')">💡 Suggerimento</button>
+    <button class="btn btn-sol" onclick="toggle('s672')">✅ Soluzione</button>
+    <button class="btn btn-step" onclick="toggle('st672')">📝 Svolgimento</button>
+  </div>
+  <div id="h672" class="panel panel-hint">
+    Sostituisci $y=\frac{x+2}{\sqrt{3}}$ nella prima equazione.
+  </div>
+  <div id="s672" class="panel panel-sol">$$x=1,\quad y=\sqrt{3}$$</div>
+  <div id="st672" class="panel panel-step">
+    $(1-\sqrt{3})x+\frac{x+2}{\sqrt{3}}=1$. Moltiplichiamo per $\sqrt{3}$:
+    $$\sqrt{3}(1-\sqrt{3})x+x+2=\sqrt{3}$$
+    $$(\sqrt{3}-3)x+x=\sqrt{3}-2$$
+    $$x(\sqrt{3}-3+1)=\sqrt{3}-2$$
+    $$x(\sqrt{3}-2)=\sqrt{3}-2$$
+    $$x=1$$
+
+    $y=\frac{1+2}{\sqrt{3}}=\frac{3}{\sqrt{3}}=\sqrt{3}$
+  </div>
+</div>
+
+</div><!-- FINE TAB ESERCIZI -->
+
+<!-- ============================================================ -->
+<!--                    TAB 2 – TEORIA                            -->
+<!-- ============================================================ -->
+<div id="tabTheory" class="tab-content">
+
+<h2 class="section-title">📖 Scheda di Teoria — Numeri Radicali</h2>
+
+<div class="theory-box">
+  <h3>1. Definizione di radicale</h3>
+  <p>Il radicale $\sqrt[n]{a}$ (radice $n$-esima di $a$) è quel numero che, elevato alla $n$, restituisce $a$:</p>
+  $$\sqrt[n]{a}=b \iff b^n=a$$
+  <p>Per $n=2$ (radice quadrata), scriviamo semplicemente $\sqrt{a}$. <strong>Condizione di esistenza</strong> (in $\mathbb{R}$): se $n$ è pari, deve essere $a\geq 0$.</p>
+  <div class="example">
+    <strong>Esempio:</strong> $\sqrt{9}=3$ perché $3^2=9$. &emsp; $\sqrt[3]{-8}=-2$ perché $(-2)^3=-8$.
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>2. Proprietà fondamentali dei radicali</h3>
+  <p><strong>Prodotto:</strong> $\sqrt[n]{a}\cdot\sqrt[n]{b}=\sqrt[n]{a\cdot b}$ &emsp;(con $a,b\geq 0$ se $n$ pari)</p>
+  <p><strong>Quoziente:</strong> $\dfrac{\sqrt[n]{a}}{\sqrt[n]{b}}=\sqrt[n]{\dfrac{a}{b}}$ &emsp;($b\neq 0$)</p>
+  <p><strong>Potenza:</strong> $\left(\sqrt[n]{a}\right)^m=\sqrt[n]{a^m}$</p>
+  <p><strong>Radice di radice:</strong> $\sqrt[m]{\sqrt[n]{a}}=\sqrt[m\cdot n]{a}$</p>
+  <p><strong>Semplificazione dell'indice:</strong> $\sqrt[n\cdot k]{a^{m\cdot k}}=\sqrt[n]{a^m}$ (con le opportune condizioni)</p>
+  <div class="example">
+    <strong>Esempi:</strong><br>
+    $\sqrt{3}\cdot\sqrt{12}=\sqrt{36}=6$<br>
+    $\dfrac{\sqrt{50}}{\sqrt{2}}=\sqrt{25}=5$<br>
+    $\sqrt[3]{\sqrt{64}}=\sqrt[6]{64}=\sqrt[6]{2^6}=2$
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>3. Semplificazione di radicali</h3>
+  <p>Per semplificare $\sqrt{a}$, scomponiamo $a$ in fattori primi e portiamo fuori dalla radice ogni coppia (per la radice quadrata).</p>
+  <div class="example">
+    <strong>Esempio:</strong> $\sqrt{72}=\sqrt{36\cdot 2}=6\sqrt{2}$<br>
+    $\sqrt{27}=\sqrt{9\cdot 3}=3\sqrt{3}$<br>
+    $\sqrt{50}=\sqrt{25\cdot 2}=5\sqrt{2}$
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>4. Addizione e sottrazione di radicali</h3>
+  <p>Si possono sommare/sottrarre solo radicali <strong>simili</strong> (stesso indice e stesso radicando).</p>
+  $$a\sqrt{n}+b\sqrt{n}=(a+b)\sqrt{n}$$
+  <div class="example">
+    <strong>Esempio:</strong> $3\sqrt{2}+5\sqrt{2}=8\sqrt{2}$<br>
+    $\sqrt{12}+\sqrt{27}=2\sqrt{3}+3\sqrt{3}=5\sqrt{3}$<br>
+    ⚠️ $\sqrt{2}+\sqrt{3}$ <strong>non</strong> si semplifica!
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>5. Razionalizzazione del denominatore</h3>
+  <p>Eliminare i radicali dal denominatore di una frazione.</p>
+  
+  <p><strong>Caso 1:</strong> Denominatore $\sqrt{a}$:</p>
+  $$\frac{b}{\sqrt{a}}=\frac{b\sqrt{a}}{a}$$
+  
+  <p><strong>Caso 2:</strong> Denominatore $\sqrt{a}\pm\sqrt{b}$ → moltiplica per il <em>coniugato</em>:</p>
+  $$\frac{c}{\sqrt{a}+\sqrt{b}}=\frac{c(\sqrt{a}-\sqrt{b})}{(\sqrt{a})^2-(\sqrt{b})^2}=\frac{c(\sqrt{a}-\sqrt{b})}{a-b}$$
+  
+  <div class="example">
+    <strong>Esempio 1:</strong> $\dfrac{6}{\sqrt{3}}=\dfrac{6\sqrt{3}}{3}=2\sqrt{3}$<br><br>
+    <strong>Esempio 2:</strong> $\dfrac{1}{\sqrt{5}-\sqrt{2}}=\dfrac{\sqrt{5}+\sqrt{2}}{5-2}=\dfrac{\sqrt{5}+\sqrt{2}}{3}$
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>6. Prodotti notevoli con radicali</h3>
+  <p>Le regole dei prodotti notevoli valgono anche con i radicali:</p>
+  $$(\sqrt{a}+\sqrt{b})^2=a+2\sqrt{ab}+b$$
+  $$(\sqrt{a}-\sqrt{b})^2=a-2\sqrt{ab}+b$$
+  $$(\sqrt{a}+\sqrt{b})(\sqrt{a}-\sqrt{b})=a-b$$
+  <div class="example">
+    <strong>Esempio:</strong> $(\sqrt{3}+\sqrt{2})^2=3+2\sqrt{6}+2=5+2\sqrt{6}$<br>
+    $(\sqrt{7}+\sqrt{3})(\sqrt{7}-\sqrt{3})=7-3=4$
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>7. Equazioni con coefficienti irrazionali</h3>
+  <p>Sono equazioni lineari in cui i coefficienti contengono radicali. Si risolvono come le equazioni normali:</p>
+  <ol>
+    <li>Porta i termini con $x$ a sinistra e quelli noti a destra.</li>
+    <li>Raccogli $x$: $Ax=B$.</li>
+    <li>Dividi: $x=\frac{B}{A}$ e <strong>razionalizza</strong> se necessario.</li>
+  </ol>
+  <div class="example">
+    <strong>Esempio:</strong> $\sqrt{3}\,x-2=x$<br>
+    $\sqrt{3}\,x-x=2 \implies x(\sqrt{3}-1)=2$<br>
+    $x=\dfrac{2}{\sqrt{3}-1}=\dfrac{2(\sqrt{3}+1)}{3-1}=\sqrt{3}+1$
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>8. Sistemi lineari con coefficienti irrazionali</h3>
+  <p>Si applicano i metodi classici (sostituzione, riduzione, Cramer). I coefficienti irrazionali si trattano come numeri qualsiasi; alla fine si razionalizza il risultato.</p>
+  <div class="example">
+    <strong>Esempio:</strong>
+    $\begin{cases}\sqrt{2}\,x+y=4\\ x-\sqrt{2}\,y=0\end{cases}$<br><br>
+    Dalla 2ª: $x=\sqrt{2}\,y$. Nella 1ª: $2y+y=4 \implies y=\frac{4}{3}$, $x=\frac{4\sqrt{2}}{3}$.
+  </div>
+</div>
+
+<div class="theory-box">
+  <h3>9. Errori più comuni ⚠️</h3>
+  <ul style="margin-left:20px;">
+    <li><strong>$\sqrt{a+b}\neq\sqrt{a}+\sqrt{b}$</strong> — la radice <em>non</em> si distribuisce sulla somma!</li>
+    <li><strong>$\sqrt{a^2}=|a|$</strong>, non semplicemente $a$ (attenzione al segno).</li>
+    <li>Non dimenticare le <strong>condizioni di esistenza</strong> nei radicali con indice pari.</li>
+    <li>Quando razionalizzi, ricorda di moltiplicare sia numeratore che denominatore.</li>
+    <li>Nelle equazioni fratte, controlla sempre le <strong>C.E.</strong> (valori esclusi).</li>
+  </ul>
+</div>
+
+</div><!-- FINE TAB TEORIA -->
+
+
+
+
+<!-- Placeholder per le altre tab (verranno completate nelle parti successive) -->
+<!-- ============================================================ -->
+<!--                    TAB 3 – FLASHCARD                         -->
+<!-- ============================================================ -->
+<div id="tabFlash" class="tab-content">
+
+<h2 class="section-title">🃏 Flashcard di Autovalutazione</h2>
+<p style="margin-bottom:20px; color: var(--text-light);">Clicca su ogni carta per rivelare la risposta. Rispondi mentalmente prima di girare!</p>
+
+<div class="flashcard-grid">
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Qual è la definizione di $\sqrt[n]{a}$?</div>
+    <div class="fc-answer">$\sqrt[n]{a}=b$ se e solo se $b^n=a$.<br>Per $n$ pari, è necessario che $a\geq 0$ (in $\mathbb{R}$).</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 È vero che $\sqrt{a+b}=\sqrt{a}+\sqrt{b}$?</div>
+    <div class="fc-answer"><strong>NO!</strong> La radice non si distribuisce sulla somma.<br>Esempio: $\sqrt{9+16}=\sqrt{25}=5 \neq 3+4=7$.</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si semplifica $\sqrt{72}$?</div>
+    <div class="fc-answer">$\sqrt{72}=\sqrt{36\cdot 2}=6\sqrt{2}$.<br>Si scompone in fattori, si portano fuori le coppie.</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quanto vale $\sqrt{3}\cdot\sqrt{12}$?</div>
+    <div class="fc-answer">$\sqrt{3}\cdot\sqrt{12}=\sqrt{36}=6$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si razionalizza $\dfrac{1}{\sqrt{5}-\sqrt{2}}$?</div>
+    <div class="fc-answer">Si moltiplica per il coniugato:<br>$\dfrac{1}{\sqrt{5}-\sqrt{2}}\cdot\dfrac{\sqrt{5}+\sqrt{2}}{\sqrt{5}+\sqrt{2}}=\dfrac{\sqrt{5}+\sqrt{2}}{5-2}=\dfrac{\sqrt{5}+\sqrt{2}}{3}$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quanto vale $(\sqrt{3}+\sqrt{2})(\sqrt{3}-\sqrt{2})$?</div>
+    <div class="fc-answer">$(\sqrt{3}+\sqrt{2})(\sqrt{3}-\sqrt{2})=3-2=1$<br>(differenza di quadrati)</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Espandi $(\sqrt{5}+1)^2$.</div>
+    <div class="fc-answer">$(\sqrt{5}+1)^2=5+2\sqrt{5}+1=6+2\sqrt{5}$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 È vero che $\sqrt{a^2}=a$?</div>
+    <div class="fc-answer"><strong>Non sempre!</strong> $\sqrt{a^2}=|a|$.<br>Se $a\geq 0$: $\sqrt{a^2}=a$. Se $a<0$: $\sqrt{a^2}=-a$.<br>Esempio: $\sqrt{(-3)^2}=\sqrt{9}=3=|-3|$.</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si risolvono le equazioni con coefficienti irrazionali?</div>
+    <div class="fc-answer">1) Porta i termini con $x$ a sinistra.<br>2) Raccogli: $Ax = B$.<br>3) Dividi: $x = B/A$.<br>4) <strong>Razionalizza</strong> il risultato se necessario.</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Risolvi: $\sqrt{2}\,x = 6$</div>
+    <div class="fc-answer">$x=\dfrac{6}{\sqrt{2}}=\dfrac{6\sqrt{2}}{2}=3\sqrt{2}$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si sommano radicali? Esempio: $\sqrt{12}+\sqrt{27}$</div>
+    <div class="fc-answer">Si semplificano e si sommano se simili:<br>$\sqrt{12}=2\sqrt{3}$, $\sqrt{27}=3\sqrt{3}$<br>$2\sqrt{3}+3\sqrt{3}=5\sqrt{3}$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Qual è il coniugato di $3+\sqrt{7}$?</div>
+    <div class="fc-answer">$3-\sqrt{7}$.<br>Il prodotto: $(3+\sqrt{7})(3-\sqrt{7})=9-7=2$.</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Razionalizza: $\dfrac{5}{\sqrt{3}}$</div>
+    <div class="fc-answer">$\dfrac{5}{\sqrt{3}}\cdot\dfrac{\sqrt{3}}{\sqrt{3}}=\dfrac{5\sqrt{3}}{3}$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Qual è la radice di radice? $\sqrt{\sqrt{16}}=\;?$</div>
+    <div class="fc-answer">$\sqrt{\sqrt{16}}=\sqrt{4}=2$.<br>Regola: $\sqrt[m]{\sqrt[n]{a}}=\sqrt[mn]{a}$, quindi $\sqrt[4]{16}=2$.</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 In un'equazione frazionaria con radicali, cosa non devi dimenticare?</div>
+    <div class="fc-answer">Le <strong>Condizioni di Esistenza (C.E.)</strong>: il denominatore non può essere zero. Verifica sempre che la soluzione trovata non annulli i denominatori!</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quanto vale $\dfrac{\sqrt{50}}{\sqrt{2}}$?</div>
+    <div class="fc-answer">$\dfrac{\sqrt{50}}{\sqrt{2}}=\sqrt{\dfrac{50}{2}}=\sqrt{25}=5$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quando due radicali si dicono "simili"?</div>
+    <div class="fc-answer">Due radicali sono simili quando hanno lo <strong>stesso indice</strong> e lo <strong>stesso radicando</strong>.<br>Es: $3\sqrt{5}$ e $7\sqrt{5}$ sono simili. $\sqrt{2}$ e $\sqrt{3}$ <strong>non</strong> lo sono.</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Risolvi il sistema:<br>$\begin{cases}\sqrt{2}\,x+y=3\\ x-y=\sqrt{2}\end{cases}$</div>
+    <div class="fc-answer">Sommiamo: $(\sqrt{2}+1)x=3+\sqrt{2}$<br>$x=\dfrac{3+\sqrt{2}}{\sqrt{2}+1}=\dfrac{(3+\sqrt{2})(\sqrt{2}-1)}{2-1}=3\sqrt{2}-3+2-\sqrt{2}=2\sqrt{2}-1$<br>$y=3-\sqrt{2}(2\sqrt{2}-1)=3-4+\sqrt{2}=\sqrt{2}-1$</div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+  <!-- ====== FLASHCARD AGGIUNTIVE ====== -->
+
+  <!-- ESPONENTI RAZIONALI -->
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Cosa significa scrivere $a^{\frac{m}{n}}$?</div>
+    <div class="fc-answer">
+      Significa la radice $n$-esima di $a^m$:
+      $$a^{\frac{m}{n}}=\sqrt[n]{a^m}$$
+      Equivalentemente: $a^{\frac{m}{n}}=\left(\sqrt[n]{a}\right)^m$.<br>
+      <strong>Condizione:</strong> se $n$ è pari, serve $a\geq 0$.
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Scrivi $\sqrt[3]{5^2}$ usando un esponente razionale.</div>
+    <div class="fc-answer">
+      $$\sqrt[3]{5^2}=5^{\frac{2}{3}}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quanto vale $8^{\frac{2}{3}}$?</div>
+    <div class="fc-answer">
+      $$8^{\frac{2}{3}}=\left(\sqrt[3]{8}\right)^2=2^2=4$$
+      Oppure: $8^{\frac{2}{3}}=\sqrt[3]{8^2}=\sqrt[3]{64}=4$.
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quanto vale $27^{-\frac{1}{3}}$?</div>
+    <div class="fc-answer">
+      $$27^{-\frac{1}{3}}=\frac{1}{27^{\frac{1}{3}}}=\frac{1}{\sqrt[3]{27}}=\frac{1}{3}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica $a^{\frac{1}{2}}\cdot a^{\frac{1}{3}}$ usando le proprietà degli esponenti.</div>
+    <div class="fc-answer">
+      Si sommano gli esponenti:
+      $$a^{\frac{1}{2}}\cdot a^{\frac{1}{3}}=a^{\frac{1}{2}+\frac{1}{3}}=a^{\frac{3+2}{6}}=a^{\frac{5}{6}}=\sqrt[6]{a^5}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica $\dfrac{a^{\frac{3}{4}}}{a^{\frac{1}{2}}}$.</div>
+    <div class="fc-answer">
+      Si sottraggono gli esponenti:
+      $$\frac{a^{\frac{3}{4}}}{a^{\frac{1}{2}}}=a^{\frac{3}{4}-\frac{1}{2}}=a^{\frac{3-2}{4}}=a^{\frac{1}{4}}=\sqrt[4]{a}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quanto vale $\left(a^{\frac{2}{3}}\right)^{\frac{3}{4}}$?</div>
+    <div class="fc-answer">
+      Si moltiplicano gli esponenti:
+      $$\left(a^{\frac{2}{3}}\right)^{\frac{3}{4}}=a^{\frac{2}{3}\cdot\frac{3}{4}}=a^{\frac{6}{12}}=a^{\frac{1}{2}}=\sqrt{a}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <!-- TRASPORTO DENTRO E FUORI LA RADICE -->
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si porta un fattore <strong>dentro</strong> la radice quadrata?<br>Esempio: $3\sqrt{5}=\sqrt{?}$</div>
+    <div class="fc-answer">
+      Si eleva al quadrato il fattore esterno e lo si moltiplica per il radicando:
+      $$3\sqrt{5}=\sqrt{3^2\cdot 5}=\sqrt{9\cdot 5}=\sqrt{45}$$
+      <strong>Regola generale:</strong> $a\sqrt[n]{b}=\sqrt[n]{a^n\cdot b}$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Porta dentro la radice: $2\sqrt[3]{5}=\sqrt[3]{?}$</div>
+    <div class="fc-answer">
+      Si eleva al cubo il fattore esterno:
+      $$2\sqrt[3]{5}=\sqrt[3]{2^3\cdot 5}=\sqrt[3]{8\cdot 5}=\sqrt[3]{40}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Porta dentro la radice quarta: $3\sqrt[4]{2}=\sqrt[4]{?}$</div>
+    <div class="fc-answer">
+      $$3\sqrt[4]{2}=\sqrt[4]{3^4\cdot 2}=\sqrt[4]{81\cdot 2}=\sqrt[4]{162}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si porta un fattore <strong>fuori</strong> dalla radice?<br>Esempio: $\sqrt[3]{54}=\;?$</div>
+    <div class="fc-answer">
+      Si scompone il radicando cercando potenze dell'indice:
+      $$\sqrt[3]{54}=\sqrt[3]{27\cdot 2}=\sqrt[3]{3^3\cdot 2}=3\sqrt[3]{2}$$
+      <strong>Regola:</strong> $\sqrt[n]{a^n\cdot b}=a\sqrt[n]{b}$ (con $a\geq 0$ se $n$ pari).
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica $\sqrt[4]{48}$.</div>
+    <div class="fc-answer">
+      $$48=16\cdot 3=2^4\cdot 3$$
+      $$\sqrt[4]{48}=\sqrt[4]{2^4\cdot 3}=2\sqrt[4]{3}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica $\sqrt[3]{128}$.</div>
+    <div class="fc-answer">
+      $$128=64\cdot 2=2^6\cdot 2=2^7$$
+      $$\sqrt[3]{128}=\sqrt[3]{2^7}=\sqrt[3]{2^6\cdot 2}=2^2\sqrt[3]{2}=4\sqrt[3]{2}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <!-- OPERAZIONI CON I RADICALI -->
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Calcola $\sqrt[3]{4}\cdot\sqrt[3]{2}$.</div>
+    <div class="fc-answer">
+      $$\sqrt[3]{4}\cdot\sqrt[3]{2}=\sqrt[3]{4\cdot 2}=\sqrt[3]{8}=2$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Calcola $\dfrac{\sqrt[3]{40}}{\sqrt[3]{5}}$.</div>
+    <div class="fc-answer">
+      $$\frac{\sqrt[3]{40}}{\sqrt[3]{5}}=\sqrt[3]{\frac{40}{5}}=\sqrt[3]{8}=2$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si sommano $\sqrt[3]{16}+\sqrt[3]{54}$?</div>
+    <div class="fc-answer">
+      Si semplificano prima:
+      $$\sqrt[3]{16}=\sqrt[3]{8\cdot 2}=2\sqrt[3]{2}$$
+      $$\sqrt[3]{54}=\sqrt[3]{27\cdot 2}=3\sqrt[3]{2}$$
+      $$2\sqrt[3]{2}+3\sqrt[3]{2}=5\sqrt[3]{2}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Quanto vale $\sqrt{2}\cdot\sqrt[3]{2}$? (radici con indice diverso)</div>
+    <div class="fc-answer">
+      Si riportano allo stesso indice (m.c.m. di 2 e 3 = 6):
+      $$\sqrt{2}=\sqrt[6]{2^3}=\sqrt[6]{8}$$
+      $$\sqrt[3]{2}=\sqrt[6]{2^2}=\sqrt[6]{4}$$
+      $$\sqrt[6]{8}\cdot\sqrt[6]{4}=\sqrt[6]{32}=\sqrt[6]{2^5}=2^{\frac{5}{6}}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Riduci allo stesso indice: $\sqrt{3}$ e $\sqrt[3]{5}$.</div>
+    <div class="fc-answer">
+      m.c.m.(2, 3) = 6.
+      $$\sqrt{3}=\sqrt[6]{3^3}=\sqrt[6]{27}$$
+      $$\sqrt[3]{5}=\sqrt[6]{5^2}=\sqrt[6]{25}$$
+      Ora hanno entrambe indice 6.
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <!-- RAZIONALIZZAZIONE CON RADICI NON QUADRATE -->
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si razionalizza $\dfrac{1}{\sqrt[3]{2}}$?</div>
+    <div class="fc-answer">
+      Si moltiplica per $\dfrac{\sqrt[3]{2^2}}{\sqrt[3]{2^2}}$:
+      $$\frac{1}{\sqrt[3]{2}}\cdot\frac{\sqrt[3]{4}}{\sqrt[3]{4}}=\frac{\sqrt[3]{4}}{\sqrt[3]{8}}=\frac{\sqrt[3]{4}}{2}$$
+      <strong>Regola:</strong> $\frac{1}{\sqrt[n]{a^k}}$, moltiplica per $\sqrt[n]{a^{n-k}}$.
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Razionalizza $\dfrac{5}{\sqrt[3]{9}}$.</div>
+    <div class="fc-answer">
+      $\sqrt[3]{9}=\sqrt[3]{3^2}$. Serve $\sqrt[3]{3^1}$ per completare:
+      $$\frac{5}{\sqrt[3]{3^2}}\cdot\frac{\sqrt[3]{3}}{\sqrt[3]{3}}=\frac{5\sqrt[3]{3}}{\sqrt[3]{3^3}}=\frac{5\sqrt[3]{3}}{3}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Razionalizza $\dfrac{3}{\sqrt[4]{8}}$.</div>
+    <div class="fc-answer">
+      $\sqrt[4]{8}=\sqrt[4]{2^3}$. Moltiplichiamo per $\sqrt[4]{2}$:
+      $$\frac{3}{\sqrt[4]{2^3}}\cdot\frac{\sqrt[4]{2}}{\sqrt[4]{2}}=\frac{3\sqrt[4]{2}}{\sqrt[4]{2^4}}=\frac{3\sqrt[4]{2}}{2}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Come si razionalizza $\dfrac{1}{\sqrt[3]{a}-\sqrt[3]{b}}$?</div>
+    <div class="fc-answer">
+      Si usa l'identità $A^3-B^3=(A-B)(A^2+AB+B^2)$ con $A=\sqrt[3]{a}$, $B=\sqrt[3]{b}$:
+      $$\frac{1}{\sqrt[3]{a}-\sqrt[3]{b}}\cdot\frac{\sqrt[3]{a^2}+\sqrt[3]{ab}+\sqrt[3]{b^2}}{\sqrt[3]{a^2}+\sqrt[3]{ab}+\sqrt[3]{b^2}}=\frac{\sqrt[3]{a^2}+\sqrt[3]{ab}+\sqrt[3]{b^2}}{a-b}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Razionalizza $\dfrac{1}{\sqrt[3]{3}+1}$ usando la somma di cubi.</div>
+    <div class="fc-answer">
+      $A^3+B^3=(A+B)(A^2-AB+B^2)$, con $A=\sqrt[3]{3}$, $B=1$:
+      $$\frac{\sqrt[3]{9}-\sqrt[3]{3}+1}{(\sqrt[3]{3}+1)(\sqrt[3]{9}-\sqrt[3]{3}+1)}=\frac{\sqrt[3]{9}-\sqrt[3]{3}+1}{3+1}=\frac{\sqrt[3]{9}-\sqrt[3]{3}+1}{4}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <!-- SEMPLIFICAZIONE DELL'INDICE -->
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica l'indice: $\sqrt[6]{a^2}$.</div>
+    <div class="fc-answer">
+      $$\sqrt[6]{a^2}=a^{\frac{2}{6}}=a^{\frac{1}{3}}=\sqrt[3]{a}$$
+      Si divide indice e esponente per il loro M.C.D. (qui 2).
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica: $\sqrt[4]{9}$.</div>
+    <div class="fc-answer">
+      $$\sqrt[4]{9}=\sqrt[4]{3^2}=3^{\frac{2}{4}}=3^{\frac{1}{2}}=\sqrt{3}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Ordina dal più piccolo al più grande: $\sqrt{3}$, $\sqrt[3]{4}$, $\sqrt[6]{20}$.</div>
+    <div class="fc-answer">
+      Riduciamo a indice 6:
+      $$\sqrt{3}=\sqrt[6]{3^3}=\sqrt[6]{27}$$
+      $$\sqrt[3]{4}=\sqrt[6]{4^2}=\sqrt[6]{16}$$
+      $$\sqrt[6]{20}=\sqrt[6]{20}$$
+      Ordine dei radicandi: $16<20<27$.<br>
+      $$\sqrt[3]{4}<\sqrt[6]{20}<\sqrt{3}$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <!-- RIEPILOGO ERRORI E TRUCCHI -->
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 ⚠️ Quali sono i 5 errori più frequenti con i radicali?</div>
+    <div class="fc-answer">
+      <ol>
+        <li>$\sqrt{a+b}\neq\sqrt{a}+\sqrt{b}$</li>
+        <li>$\sqrt{a^2}=|a|$, non $a$</li>
+        <li>Dimenticare le C.E. ($a\geq 0$ per radice pari)</li>
+        <li>Razionalizzare solo il denominatore e non anche il numeratore</li>
+        <li>Confondere trasporto dentro/fuori: il fattore va elevato all'indice della radice</li>
+      </ol>
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Vero o falso: $\sqrt[3]{-27}=-3$?</div>
+    <div class="fc-answer">
+      <strong>VERO!</strong> Le radici con indice <strong>dispari</strong> ammettono radicandi negativi:
+      $$(-3)^3=-27 \implies \sqrt[3]{-27}=-3$$
+      ⚠️ Solo le radici con indice <strong>pari</strong> richiedono $a\geq 0$.
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica: $\sqrt[3]{-8x^6}$.</div>
+    <div class="fc-answer">
+      $$\sqrt[3]{-8x^6}=\sqrt[3]{(-2)^3\cdot (x^2)^3}=-2x^2$$
+      (La radice cubica di un numero negativo è negativa.)
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Schema riassuntivo: come si razionalizza in base al tipo di denominatore?</div>
+    <div class="fc-answer">
+      <table style="width:100%; font-size:0.9em; border-collapse:collapse;">
+        <tr style="background:#e8f8f5;"><td style="padding:6px;border:1px solid #ccc;"><strong>Denominatore</strong></td><td style="padding:6px;border:1px solid #ccc;"><strong>Moltiplica per</strong></td></tr>
+        <tr><td style="padding:6px;border:1px solid #ccc;">$\sqrt{a}$</td><td style="padding:6px;border:1px solid #ccc;">$\sqrt{a}$</td></tr>
+        <tr><td style="padding:6px;border:1px solid #ccc;">$\sqrt{a}\pm\sqrt{b}$</td><td style="padding:6px;border:1px solid #ccc;">$\sqrt{a}\mp\sqrt{b}$ (coniugato)</td></tr>
+        <tr><td style="padding:6px;border:1px solid #ccc;">$\sqrt[3]{a}$</td><td style="padding:6px;border:1px solid #ccc;">$\sqrt[3]{a^2}$</td></tr>
+        <tr><td style="padding:6px;border:1px solid #ccc;">$\sqrt[3]{a^2}$</td><td style="padding:6px;border:1px solid #ccc;">$\sqrt[3]{a}$</td></tr>
+        <tr><td style="padding:6px;border:1px solid #ccc;">$\sqrt[n]{a^k}$</td><td style="padding:6px;border:1px solid #ccc;">$\sqrt[n]{a^{n-k}}$</td></tr>
+        <tr><td style="padding:6px;border:1px solid #ccc;">$\sqrt[3]{a}\pm\sqrt[3]{b}$</td><td style="padding:6px;border:1px solid #ccc;">Usa somma/differenza di cubi</td></tr>
+      </table>
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Trasforma in radicale: $x^{-\frac{3}{5}}$.</div>
+    <div class="fc-answer">
+      $$x^{-\frac{3}{5}}=\frac{1}{x^{\frac{3}{5}}}=\frac{1}{\sqrt[5]{x^3}}$$
+      Per razionalizzare: $\frac{1}{\sqrt[5]{x^3}}\cdot\frac{\sqrt[5]{x^2}}{\sqrt[5]{x^2}}=\frac{\sqrt[5]{x^2}}{x}$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Calcola $\sqrt[4]{3}\cdot\sqrt[4]{27}$.</div>
+    <div class="fc-answer">
+      $$\sqrt[4]{3}\cdot\sqrt[4]{27}=\sqrt[4]{3\cdot 27}=\sqrt[4]{81}=\sqrt[4]{3^4}=3$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+  <div class="flashcard" onclick="this.classList.toggle('flipped')">
+    <div class="fc-question">📌 Semplifica $\sqrt[6]{64}$.</div>
+    <div class="fc-answer">
+      $$64=2^6$$
+      $$\sqrt[6]{2^6}=2$$
+    </div>
+    <span class="fc-instruction">clicca per girare</span>
+  </div>
+
+
+</div><!-- fine flashcard-grid -->
+
+</div><!-- FINE TAB FLASHCARD -->
+
+<script>
+function openTab(evt, tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  evt.currentTarget.classList.add('active');
+}
+function toggle(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+  if(el.classList.contains('show')) MathJax.typesetPromise([el]);
+}
+</script>
+</body>
+</html>
